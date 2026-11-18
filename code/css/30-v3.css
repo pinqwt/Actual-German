@@ -15,13 +15,13 @@
 
 body.v3 {
   --rd-ink: #0f1114; --rd-ink-2: #15181c; --rd-ink-3: #1f2329;
-  --rd-paper: #e8eaec; --rd-card: #ffffff; --rd-line: #c5cad0; --rd-line-dk: rgba(255, 255, 255, .13);
+  --rd-paper: #ffffff; --rd-card: #ffffff; --rd-line: #c5cad0; --rd-line-dk: rgba(255, 255, 255, .13);
   --rd-text: #14171a; --rd-mute: #4f565f; --rd-mute-dk: rgba(255, 255, 255, .74);
   --rd-red: #d3141f; --rd-red-t: #b8101a; --rd-red-dk: #a30e17; --rd-red-2: #ff4650;
   --rd-r: 3px; --rd-r-sm: 2px;
   --rd-display: 'Barlow Condensed', 'Arial Narrow', 'Segoe UI', sans-serif;
   --rd-mono: 'IBM Plex Mono', ui-monospace, Consolas, 'Courier New', monospace;
-  --rd-hazard: repeating-linear-gradient(-45deg, var(--rd-red) 0 12px, #0f1114 12px 24px);
+  --rd-hazard: repeating-linear-gradient(-45deg, var(--rd-red) 0 12px, #ffffff 12px 24px);
   --rd-grid: linear-gradient(rgba(255, 255, 255, .045) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .045) 1px, transparent 1px);
   /* the older stylesheets' tokens, so every JS-rendered component follows */
   --orange: #d3141f; --orange-dark: #a30e17; --orange-light: #ff4650; --gold: #ff4650; --flag-red: #d3141f;
@@ -242,4 +242,167 @@ body.v3 {
   .v3 .rd-wordmark b { font-size: 23px; }
   .v3 .v3-car-li { flex-basis: min(72vw, 280px); }
 }
-.v3 .rd-btn:focus-visible, .v3 .v3-btn:focus-visible, .v3 .v3-part:focus-visible, .v3 .v3-car:focus-visible { outline: 3px solid var(--rd-red-2); outline-offset: 3px; }
+.v3 .rd-btn:focus-visible, .v3 .v3-btn:focus-visible, .v3 .v3-part:focus-visible, .v3 .v3-car:focus-visible { outline: 3px solid var(--rd-red); outline-offset: 3px; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   ALL-WHITE THEME (2026-11-19, owner: "make everything white, none of the
+   background should be black"). Every surface that was graphite is white now;
+   structure comes from hairlines, shadows and the red accent instead of dark
+   bands. Photos (the collage, the car cut-outs) are untouched. This block is
+   LAST on purpose so it wins over the dark rules above.
+   ═══════════════════════════════════════════════════════════════════════ */
+.v3 { --rd-line: #d3d7dc; }
+
+/* Header ----------------------------------------------------------------- */
+.v3 #header, .v3 #header.scrolled, .v3 #header:focus-within { background: #fff; border-bottom: 3px solid var(--rd-red); box-shadow: 0 6px 18px -14px rgba(20, 23, 26, .5); }
+.v3 .logo-img { height: 56px; }
+.v3 .rd-wordmark { color: var(--rd-text); }
+.v3 .rd-wordmark small { color: var(--rd-mute); }
+.v3 #nav a { color: var(--rd-text); }
+.v3 #nav a:hover { color: var(--rd-red-t); }
+.v3 .rd-hcall { color: var(--rd-text); border: 2px solid var(--rd-text); }
+.v3 .rd-hcall:hover { background: var(--rd-text); color: #fff; }
+.v3 .header-search-btn, .v3 .hamburger { color: var(--rd-text); border-color: var(--rd-text); background: transparent; }
+@media (min-width: 1200px) {
+  .v3 .header-search-btn { color: var(--rd-mute); }
+  .v3 .header-search-input, .v3 .header-search-wrap.open .header-search-input { background: #f3f4f6; color: var(--rd-text); border: 2px solid var(--rd-line); }
+  .v3 .header-search-input::placeholder { color: var(--rd-mute); }
+  .v3 .header-search-input:focus { background: #fff; border-color: var(--rd-text); }
+}
+@media (max-width: 1150px) {
+  .v3 #nav { background: #fff; border-bottom: 3px solid var(--rd-red); box-shadow: 0 18px 24px -18px rgba(20, 23, 26, .4); }
+}
+@media (max-width: 768px) { .v3 .logo-img { height: 46px; } }
+
+/* Hero -------------------------------------------------------------------- */
+.v3 .v3-scene, .v3 .svc-band { background: #fff; }
+.v3 .v3-stick {
+  background: radial-gradient(70% 55% at 12% 0%, rgba(211, 20, 31, .09), transparent 70%),
+              linear-gradient(rgba(20, 23, 26, .045) 1px, transparent 1px), linear-gradient(90deg, rgba(20, 23, 26, .045) 1px, transparent 1px), #fff;
+  background-size: auto, 48px 48px, 48px 48px, auto;
+}
+.v3 .v3-tag { color: var(--rd-red-t); }
+.v3 .v3-title { color: var(--rd-text); }
+.v3 .v3-title em { color: var(--rd-red); }
+.v3 .v3-sub { color: var(--rd-mute); }
+.v3 .v3-btn { border-color: var(--rd-text); }
+.v3 .v3-btn-solid { background: var(--rd-red); border-color: var(--rd-red); color: #fff; }
+.v3 .v3-btn-line { color: var(--rd-text); }
+.v3 .v3-btn-line:hover { background: var(--rd-text); color: #fff; }
+.v3 .v3-part { border: 1px solid var(--rd-line); border-top: 4px solid var(--rd-red); box-shadow: 0 12px 22px -16px rgba(20, 23, 26, .55); }
+.v3 .v3-part:hover { border-top-color: var(--rd-red-dk); box-shadow: 0 18px 28px -16px rgba(20, 23, 26, .6); }
+.v3 .v3-part.t1, .v3 .v3-part.t2, .v3 .v3-part.t3 { background: #fff; }
+.v3 .v3-part::before { color: var(--rd-mute); }
+.v3 .v3-pc { color: var(--rd-mute); }
+.v3 .toast-msg { background: #fff; color: var(--rd-text); border: 2px solid var(--rd-text); }
+.v3 .svc-band { border-top-color: transparent; }
+
+/* Finder band -------------------------------------------------------------- */
+.v3 .v3-finder-sec { background: linear-gradient(rgba(20, 23, 26, .04) 1px, transparent 1px), linear-gradient(90deg, rgba(20, 23, 26, .04) 1px, transparent 1px), #fff; background-size: 48px 48px, 48px 48px, auto; color: var(--rd-text); border-bottom: 1px solid var(--rd-line); }
+.v3 .v3-finder-sec .v3-kicker { color: var(--rd-red-t); }
+.v3 .v3-finder-sec .v3-h2 { color: var(--rd-text); }
+.v3 .v3-finder-sec .v3-h2 em { color: var(--rd-red-t); }
+.v3 .rd-finder { border: 1px solid var(--rd-line); border-top: 5px solid var(--rd-red); box-shadow: 0 24px 44px -28px rgba(20, 23, 26, .5); }
+
+/* Cars we fit: white plates, dark logos, bigger ---------------------------- */
+.v3 .v3-car { background: #fff; background-image: none; color: var(--rd-text); border: 1px solid var(--rd-line); border-left: 6px solid var(--rd-red); }
+.v3 .v3-car:hover { background: #fff; background-image: none; border-color: var(--rd-line); border-left-color: var(--rd-red-dk); box-shadow: 0 22px 34px -24px rgba(20, 23, 26, .55); }
+.v3 .v3-car[aria-pressed="true"] { box-shadow: inset 0 0 0 3px var(--rd-red); }
+.v3 .v3-car::after { color: var(--rd-mute); }
+.v3 .v3-car .v3-car-logo { width: 58px; height: 58px; filter: brightness(0); opacity: 1; top: 14px; }
+.v3 .v3-car-name { margin-top: 72px; color: var(--rd-text); }
+.v3 .v3-car-model { color: var(--rd-red-t); }
+.v3 .v3-car .v3-car-img { filter: drop-shadow(0 10px 10px rgba(20, 23, 26, .25)); }
+
+/* Category tiles: white cards with the transparent part cut-outs ------------ */
+.v3 .cat-card { background-color: #fff; background-image: none; border: 1px solid var(--rd-line); box-shadow: none; }
+.v3 .cat-card::before { display: none; }
+.v3 .cat-card::after { background: var(--rd-red); color: #fff; }
+.v3 .cat-card h3 { color: var(--rd-text); text-shadow: none; }
+.v3 .cat-card p { color: var(--rd-mute); text-shadow: none; }
+.v3 .cat-card .cat-icon { position: static; margin: 4px 0 auto; font-size: 54px; color: var(--rd-red); text-shadow: none; align-self: center; }
+.v3 .cat-card:hover { border-color: var(--rd-text); box-shadow: inset 0 -5px 0 var(--rd-red), 0 20px 32px -24px rgba(20, 23, 26, .5); }
+.v3 .cat-card:hover .cat-icon { color: var(--rd-red-dk); }
+.v3 .cat-card[data-cat] { background-repeat: no-repeat !important; background-size: auto 44% !important; background-position: center 9% !important; }
+.v3 .cat-card[data-cat="engine"]      { background-image: url('../../img/parts/engine.webp') !important; background-size: auto 66% !important; }
+.v3 .cat-card[data-cat="brakes"]      { background-image: url('../../img/parts/brake-disc.webp') !important; }
+.v3 .cat-card[data-cat="suspension"]  { background-image: url('../../img/parts/suspension-assembly.webp') !important; }
+.v3 .cat-card[data-cat="filters"]     { background-image: url('../../img/parts/air-filter.webp') !important; }
+.v3 .cat-card[data-cat="electrical"]  { background-image: url('../../img/parts/bosch-spark-plug.webp') !important; }
+.v3 .cat-card[data-cat="cooling"]     { background-image: url('../../img/parts/behr-radiator.webp') !important; }
+.v3 .cat-card[data-cat="transmission"]{ background-image: url('../../img/parts/lemforder-control-arm.webp') !important; }
+.v3 .cat-card[data-cat="body-lights"] { background-image: url('../../img/parts/audi-headlight.webp') !important; }
+.v3 .cat-card[data-cat="accessories"] { background-image: url('../../img/parts/front-bumper.webp') !important; }
+.v3 .cat-card[data-cat="all"]         { background-image: url('../../img/parts/engine.webp') !important; }
+.v3 .cat-card[data-cat] .cat-icon { display: none; }
+.v3 .cat-card.cat-card-custom .cat-icon, .v3 .cat-card[data-cat="oils-fluids"] .cat-icon, .v3 .cat-card[data-cat="exhaust"] .cat-icon { display: block; }
+
+/* Catalogue ---------------------------------------------------------------- */
+.v3 .pill.active { background: var(--rd-red); border-color: var(--rd-red); color: #fff; box-shadow: none; }
+.v3 .btn-add { background: #fff !important; color: var(--rd-text); border: 2px solid var(--rd-text); }
+.v3 .btn-add:hover { background: var(--rd-red) !important; border-color: var(--rd-red); color: #fff; }
+.v3 .product-card:hover { border-bottom-color: var(--rd-red); }
+
+/* Parts brands: bigger logos ------------------------------------------------ */
+.v3 .rd-brand-row img { max-height: 64px; max-width: 230px; }
+.v3 .rd-brand-row .is-square img { max-height: 104px; }
+@media (max-width: 768px) {
+  .v3 .rd-brand-row img { max-height: 48px; max-width: 90%; }
+  .v3 .rd-brand-row .is-square img { max-height: 78px; }
+}
+
+/* Workshop services: white -------------------------------------------------- */
+.v3 #services { background: #fff; border-top: 1px solid var(--rd-line); border-bottom: 1px solid var(--rd-line); color: var(--rd-text); }
+.v3 #services .section-header h2 { color: var(--rd-text); }
+.v3 #services .section-header h2 .orange { color: var(--rd-red-t); }
+.v3 #services .section-tag { color: var(--rd-red-t); background: none; border: 0; }
+.v3 .svc-intro { color: var(--rd-mute); }
+.v3 .svc-trust span { color: var(--rd-text); }
+.v3 .svc-trust i { color: var(--rd-red); }
+.v3 .svc-list-head h3 { color: var(--rd-text); }
+.v3 .svc-list-head p { color: var(--rd-mute); }
+.v3 .svc-card { background: #fff; border: 1px solid var(--rd-line); border-top: 4px solid var(--rd-red); box-shadow: 0 14px 26px -22px rgba(20, 23, 26, .45); }
+.v3 .svc-card:hover { background: #f7f8f9; border-color: var(--rd-text); border-top-color: var(--rd-red); }
+.v3 .svc-card::before { display: none; }
+.v3 .svc-icon { background: rgba(211, 20, 31, .08); border: 1px solid rgba(211, 20, 31, .25); }
+.v3 .svc-icon i { color: var(--rd-red); }
+.v3 .svc-media { background: #eef0f2; }
+.v3 .svc-name { color: var(--rd-text); }
+.v3 .svc-desc { color: var(--rd-mute); }
+.v3 .svc-make { color: var(--rd-mute); background: #f3f4f6; border-color: var(--rd-line); }
+.v3 .svc-meta { border-top-color: var(--rd-line); }
+.v3 .svc-price { color: var(--rd-text); }
+.v3 .svc-price em, .v3 .svc-dur { color: var(--rd-mute); }
+.v3 .svc-price-poa { color: var(--rd-red-t); }
+.v3 .svc-parts { color: var(--rd-mute); }
+.v3 .svc-parts:hover { color: var(--rd-red-t); background: #f3f4f6; }
+.v3 .svc-cta { background: #f7f8f9; border: 1px solid var(--rd-line); border-left: 6px solid var(--rd-red); }
+.v3 .svc-cta-txt h3 { color: var(--rd-text); }
+.v3 .svc-cta-txt p { color: var(--rd-mute); }
+.v3 .svc-cta-call { color: var(--rd-text); border: 2px solid var(--rd-text); }
+.v3 .svc-cta-call:hover { background: var(--rd-text); border-color: var(--rd-text); color: #fff; }
+
+/* Visit us + FAQ ------------------------------------------------------------- */
+.v3 #contact.rd-visit { background: #fff; border-top: 1px solid var(--rd-line); }
+.v3 .rd-on-dark .rd-h2 em, .v3 .rd-visit .rd-h2 em { color: var(--rd-red-t); }
+.v3 .rd-visit .rd-idx { color: #fff; background: var(--rd-red); }
+
+/* Footer: white with the hazard stripe on top ------------------------------ */
+.v3 footer { background: #fff; color: var(--rd-mute); }
+.v3 .rd-foot-about { color: var(--rd-mute); }
+.v3 .rd-foot-col h3 { color: var(--rd-text); }
+.v3 .rd-foot-col a { color: var(--rd-mute); }
+.v3 .rd-foot-col a:hover { color: var(--rd-red-t); }
+.v3 .footer-seo { border-top-color: var(--rd-line); }
+.v3 .footer-seo h3 { color: var(--rd-text); }
+.v3 .footer-seo a { color: var(--rd-mute); }
+.v3 .footer-seo a:hover { color: var(--rd-red-t); }
+.v3 .rd-foot-bottom { border-top-color: var(--rd-line); color: var(--rd-mute); }
+
+/* Product pop-up bar and phone bottom bar ----------------------------------- */
+.v3 .prod-modal-topbar { background: #fff; border-bottom: 3px solid var(--rd-red); }
+@media (max-width: 768px) {
+  .v3 .rd-actionbar { background: #fff; border-top: 3px solid var(--rd-red); box-shadow: 0 -10px 26px -18px rgba(20, 23, 26, .5); }
+  .v3 .rd-actionbar > * { color: var(--rd-text); }
+  .v3 .rd-actionbar .is-wa { background: var(--rd-red); color: #fff; }
+}
