@@ -18,4 +18,4 @@ http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': T[path.extname(f).toLowerCase()] || 'application/octet-stream', 'Cache-Control': 'no-store' });
     res.end(buf);
   });
-}).listen(PORT, () => console.log(`Live site:  http://localhost:${PORT}/German-Expert/\nRedesign:   http://localhost:${PORT}/German-Expert/v2.html`));
+}).listen(PORT, () => console.log(`Live site:  http://localhost:${PORT}/German-Expert/\nAdmin:      http://localhost:${PORT}/German-Expert/admin/`));

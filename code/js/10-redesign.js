@@ -1,6 +1,6 @@
 // ════════════════════════════════════════════════════════════════════════
-// REDESIGN (v2.html) — vehicle finder, makes band, mobile action bar.
-// Loaded after 09-services.js and only by v2.html; every entry point checks
+// HOMEPAGE (index.html) — vehicle finder, makes band, mobile action bar.
+// Loaded after 09-services.js; every entry point checks
 // for its own element first, so on a page without them this file does nothing.
 //
 // The finder's data is scripts/data/vehicle-tree.json — the same make > model >
@@ -125,33 +125,4 @@
         .map(function(o) { return { slug: o.value, label: o.textContent, models: [] }; }) };
       fillModels();
     });
-})();
-
-// Hero make labels. 08-hero.js draws the big outlined make word + logo inside
-// an SVG that the redesign hides; this lifts the logo and the word out of that
-// SVG into a small label (logo + name) inside each car's own <figure>, so it
-// fades with the slide. No change to 08-hero.js.
-(function rdCaptions() {
-  var stage = document.getElementById('heroStage');
-  if (!stage) return;
-  function run() {
-    Array.prototype.forEach.call(stage.querySelectorAll('.ge-car'), function(fig) {
-      if (fig.querySelector('.rd-carcap')) return;
-      var svg = fig.querySelector('.ge-car-model');
-      if (!svg) return;
-      var t = svg.querySelector('text');
-      var im = svg.querySelector('image');
-      var name = t ? t.textContent.trim() : '';
-      var src = im ? (im.getAttribute('href') || im.getAttribute('xlink:href') || '') : '';
-      if (!name && !src) return;
-      var cap = document.createElement('div');
-      cap.className = 'rd-carcap';
-      cap.setAttribute('aria-hidden', 'true');
-      if (src) { var img = document.createElement('img'); img.className = 'rd-carcap-logo'; img.src = src; img.alt = ''; cap.appendChild(img); }
-      if (name) { var s = document.createElement('span'); s.className = 'rd-carcap-name'; s.textContent = name; cap.appendChild(s); }
-      fig.appendChild(cap);
-    });
-  }
-  run();
-  new MutationObserver(run).observe(stage, { childList: true });
 })();

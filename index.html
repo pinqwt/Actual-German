@@ -13,6 +13,7 @@
   <!-- No maximum-scale/user-scalable=no — those disable pinch-zoom, a real
        accessibility harm for low-vision users, not just a Lighthouse nit. -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="index, follow" />
   <!-- This site is authored as a light-themed page with its own explicit
        colors. Without this, some browsers' forced/auto dark mode
        re-interprets those colors on top of what's already there, which is
@@ -47,6 +48,7 @@
   <meta name="twitter:image:alt" content="Alamdar Auto Spare Parts Co. Kuwait" />
   <meta name="geo.region" content="KW-KU" />
   <meta name="geo.placename" content="Shuwaikh Industrial Area, Kuwait" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&display=swap" />
   <link rel="icon" href="favicon.png" sizes="any" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <!-- Second discovery path for the sitemap. GitHub Pages serves this project
@@ -97,31 +99,6 @@
     }
   }
   </script>
-  <!-- Hero skeleton. Reserves the hero's size BEFORE the loader below injects
-       code/css/10-hero.css. Without it the hero is only as tall as its copy
-       at first paint and then grows ~490px the moment that stylesheet lands,
-       dropping the categories grid and everything under it down the page — one
-       0.365 layout shift at 2.6s on a throttled phone, i.e. nearly all of the
-       page's CLS (0.37 -> 0.01 with this in place).
-
-       It MUST stay above the loader script: the loader appends its <link>s to
-       whatever is in <head> at the time it runs, so anything declared after it
-       would outrank the real stylesheet instead of yielding to it. Values are
-       copied from 10-hero.css; change them in both places. -->
-  <style>
-    .ge-hero { position: relative; isolation: isolate; overflow: hidden; background: #0f1115; color: #fff; min-height: min(760px, 88vh); padding-top: 68px; }
-    /* Out of flow from the first paint: in flow it is a ~154px block that the
-       hero then has to shrink by, which was the rest of the shift. */
-    .ge-hero-bg { position: absolute; inset: 0; z-index: -1; }
-    .ge-hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; }
-    .ge-hero-inner { position: relative; z-index: 1; width: 100%; max-width: 1240px; margin: 0 auto; padding: 34px 24px 56px; }
-    .ge-hero-stage { height: clamp(360px, 67vw, 900px); }
-    @media (max-width: 900px) {
-      .ge-hero { min-height: 0; }
-      .ge-hero-inner { padding: 28px 20px 48px; }
-      .ge-hero-stage { height: clamp(404px, calc(82vw + 96px), 566px); }
-    }
-  </style>
   <script>
   // Version comes from localStorage (kept in sync with Supabase's
   // expert_settings.asset_version by checkAssetVersion() in
@@ -138,7 +115,7 @@
     // 12-services sits BEFORE 11-ui-polish deliberately: the polish layer has
     // to load last (see code/css/11-ui-polish.css), so load order here is not
     // file-number order.
-    ['01-base','02-sections','03-cart-features-contact','04-footer','05-responsive','06-lang-rtl','07-modals','08-account-auth','09-widgets','10-hero','12-services','11-ui-polish'].forEach(function(f) {
+    ['01-base','02-sections','03-cart-features-contact','04-footer','05-responsive','06-lang-rtl','07-modals','08-account-auth','09-widgets','12-services','11-ui-polish','20-redesign','30-v3'].forEach(function(f) {
       var l = document.createElement('link');
       l.rel = 'stylesheet';
       l.href = 'code/css/' + f + '.css?v=' + v;
@@ -156,27 +133,15 @@
     <link rel="stylesheet" href="code/css/07-modals.css" />
     <link rel="stylesheet" href="code/css/08-account-auth.css" />
     <link rel="stylesheet" href="code/css/09-widgets.css" />
-    <link rel="stylesheet" href="code/css/10-hero.css" />
     <link rel="stylesheet" href="code/css/12-services.css" />
     <link rel="stylesheet" href="code/css/11-ui-polish.css" />
+    <link rel="stylesheet" href="code/css/20-redesign.css" />
+    <link rel="stylesheet" href="code/css/30-v3.css" />
   </noscript>
   <!-- Opens the connection to these origins early (DNS + TLS), in parallel
        with everything else, instead of waiting until the stylesheet
        requests below discover them — shaves real time off the
        render-blocking critical path for both. -->
-  <!-- The first hero car is the LCP element, and it is only requested once
-       the runtime loader has injected and run code/js/08-hero.js - about 4s
-       of pure discovery delay on a throttled phone. Preloading it here makes
-       it discoverable in the HTML straight away. Keep in sync with
-       HERO_CARS[0] in code/js/08-hero.js: imagesrcset/imagesizes must repeat
-       that car's srcset and sizes EXACTLY, or the preload scanner resolves a
-       different candidate than the <img> does and the download is thrown
-       away. Two media-split href preloads used to do that - on a DPR-1
-       desktop the 720px slot resolves to the 760w file, so the full-size
-       1400w image was fetched and never used on every such machine. -->
-  <link rel="preload" as="image"
-        imagesrcset="img/hero/mercedes-e-class-sm.webp 760w, img/hero/mercedes-e-class.webp 1400w"
-        imagesizes="(max-width: 600px) 240px, (max-width: 900px) 92vw, 720px" fetchpriority="high" />
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -214,76 +179,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha384-/o6I2CkkWC//PSjvWC/eYN7l3xM3tJm8ZzVkCOfp//W05QcE3mlGskpoHB6XqI+B" crossorigin="anonymous" />
   </noscript>
 
-  <!-- Alamdar Auto: low-GPU rendering profile (desktop + mobile).
-       Overrides dynamically injected stylesheets without modifying site logic.
-       Manual carousel navigation and interactive catalogue remain available. -->
+  <!-- Low-GPU profile: no backdrop-filter sampling anywhere (costly on phones). -->
   <style id="ge-low-gpu-mode">
-    /* GPU-heavy backdrop sampling across headers, buttons and badges. */
     *, *::before, *::after {
       -webkit-backdrop-filter: none !important;
       backdrop-filter: none !important;
     }
-    /* A flat car stage rather than expensive 3D layers and shaders. */
-    .ge-hero-stage { perspective: none !important; }
-    .ge-hero-canvas, .ge-car-sheen, .ge-car-shadow { display: none !important; }
-    .ge-car, .ge-car.is-active, .ge-car.is-leaving {
-      transform: none !important;
-      transition: opacity .12s linear !important;
-      will-change: auto !important;
-    }
-    .ge-car-tilt, .ge-car-body {
-      transform: none !important;
-      transform-style: flat !important;
-      transition: none !important;
-      animation: none !important;
-      will-change: auto !important;
-    }
-    /* Large alpha-masked images + layered animated drop-shadows were costly. */
-    .ge-car-img, .ge-car-model, .ge-ring-img, .ge-car-chip-img {
-      filter: none !important;
-      -webkit-filter: none !important;
-      animation: none !important;
-      will-change: auto !important;
-    }
-    /* Leave interactive hover/focus UI intact; stop decorative loops.
-       ⚠ The parts ring is the ONE deliberate exception. It is the feature
-       (the owner asked for the spare parts to rotate around the car), not
-       decoration, and it costs a single animated custom property on the
-       parent plus ten composited translates — nothing next to the WebGPU
-       shader and the 3D car stage this profile already switches off. Drop
-       the :not() and the ring renders frozen, with no error anywhere to
-       say why — so don't "simplify" it back. */
-    /* The phone chip strip's loop (.ge-car-track) is exempt for the same reason
-       as the ring: it is a feature, one composited translate, and without the
-       :not() it sits frozen on exactly the phones this profile targets. */
-    .ge-hero *:not(.ge-ring):not(.ge-car-track), .ge-hero *::before, .ge-hero *::after {
-      animation: none !important;
-    }
-    @media (prefers-reduced-motion: no-preference) {
-      .ge-hero .ge-car.is-active .ge-car-float {
-        animation: geLowGpuCarFloat 7s ease-in-out infinite !important;
-      }
-    }
-    .ge-hero.is-idle .ge-car.is-active .ge-car-float {
-      animation-play-state: paused !important;
-    }
-    @keyframes geLowGpuCarFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-    .ge-hero-bg { background: linear-gradient(115deg, #222831, #0f1115 60%, #211317) !important; }
   </style>
 </head>
-<body>
+<body class="rd v3">
 
   <!-- Full-page splash shown until the page finishes loading, then fades out.
        Styled inline (not in the css/*.css files) on purpose: those are
        injected async by the cache-busting loader above, so an external
        stylesheet wouldn't be ready in time and this would flash unstyled. -->
   <style>
-    #pagePreloader { position: fixed; inset: 0; z-index: 99999; background: #0f1115; display: flex; align-items: center; justify-content: center; transition: opacity .35s ease, visibility .35s ease; }
+    #pagePreloader { position: fixed; inset: 0; z-index: 99999; background: #ffffff; display: flex; align-items: center; justify-content: center; transition: opacity .35s ease, visibility .35s ease; }
     #pagePreloader.hide { opacity: 0; visibility: hidden; pointer-events: none; }
-    #pagePreloader .preloader-gear { width: 72px; height: 72px; border-radius: 50%; border: 6px solid rgba(255,255,255,.12); border-top-color: #ef3b42; border-right-color: #c1121f; animation: preloader-spin .9s linear infinite; }
+    #pagePreloader .preloader-gear { width: 72px; height: 72px; border-radius: 50%; border: 6px solid rgba(14,16,19,.12); border-top-color: #d3141f; border-right-color: #0b0c0e; animation: preloader-spin .9s linear infinite; }
     @keyframes preloader-spin { to { transform: rotate(360deg); } }
     @media (prefers-reduced-motion: reduce) { #pagePreloader .preloader-gear { animation: none; } }
     #pagePreloader .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
@@ -326,41 +239,36 @@
        on screen (see _switchCategoryWithLoading in js/02-catalog-render.js) -->
   <div class="cat-load-overlay" id="catLoadOverlay"><span class="cat-load-gear" aria-hidden="true"></span></div>
 
-  <header id="header">
+    <header id="header">
     <div class="container header-inner">
       <a href="#header" class="logo-wrap" onclick="goHome(event)">
-        <!-- The badge is a circular crest; at 52px the "ALAMDAR AUTO" lettering
-             around its ring is far too small to read, so the wordmark beside it
-             is now always shown rather than only as an onerror fallback.
-             alt="" because that text already names the shop — otherwise a
-             screen reader announces "Alamdar Auto" twice for one link. -->
         <img src="logo.jpg" width="234" height="234" alt="" class="logo-img" onerror="this.style.display='none'" />
-        <div class="logo-text-fallback"><span class="logo-dhow" style="font-size:0.8em;letter-spacing:2px">ALAMDAR<br>AUTO</span></div>
+        <span class="rd-wordmark"><b>Alamdar</b><small>Auto Spare Parts · Kuwait</small></span>
       </a>
       <nav id="nav">
-        <a href="#about" data-i18n="nav_about" onclick="document.getElementById('nav').classList.remove('open')">About</a>
-        <a href="#products" data-i18n="nav_products" onclick="document.getElementById('nav').classList.remove('open')">Parts</a>
-        <a href="#services" data-i18n="nav_services" onclick="document.getElementById('nav').classList.remove('open')">Services</a>
-        <a href="#faq" data-i18n="nav_faq" onclick="document.getElementById('nav').classList.remove('open')">FAQ</a>
-        <a href="#contact" data-i18n="nav_contact" onclick="document.getElementById('nav').classList.remove('open')">Contact</a>
-        <a href="#" id="navMyOrders" onclick="document.getElementById('nav').classList.remove('open');onAccountBtnClick('orders');return false;" style="display:none"><i class="fa fa-receipt" style="margin-right:6px"></i>My Orders</a>
-        <a href="#" id="navSignIn" onclick="document.getElementById('nav').classList.remove('open');openAuthModal('login');return false;"><i class="fa fa-user" style="margin-right:6px"></i>Sign In</a>
-        <a href="#" id="navWishlist" onclick="document.getElementById('nav').classList.remove('open');openWishlist();return false;"><i class="fa fa-heart" style="margin-right:6px"></i>Wishlist <span id="navWishlistBadge" style="display:none;background:var(--orange);color:#fff;border-radius:50%;padding:0 5px;font-size:10px;font-weight:900"></span></a>
-        <a href="#" id="navCart" onclick="document.getElementById('nav').classList.remove('open');openCart();return false;"><i class="fa fa-shopping-cart" style="margin-right:6px"></i>Cart <span id="navCartBadge" class="nav-cart-badge" style="display:none">0</span></a>
-        <a href="#" id="navTrackOrder" onclick="document.getElementById('nav').classList.remove('open');openOrderTracker();return false;"><i class="fa fa-search" style="margin-right:6px"></i>Track Order</a>
-        <a href="#" id="navCancelOrder" onclick="document.getElementById('nav').classList.remove('open');openOrderTracker();switchOrderTab('cancel');return false;"><i class="fa fa-times-circle" style="margin-right:6px"></i>Cancel Order</a>
+        <a href="#products" onclick="document.getElementById('nav').classList.remove('open')">Parts</a>
+        <a href="#brandBanners" onclick="document.getElementById('nav').classList.remove('open')">Cars</a>
+        <a href="#services" onclick="document.getElementById('nav').classList.remove('open')">Workshop</a>
+        <a href="#faq" onclick="document.getElementById('nav').classList.remove('open')">FAQ</a>
+        <a href="#contact" onclick="document.getElementById('nav').classList.remove('open')">Visit us</a>
+        <!-- Kept for the scripts that look them up; all hidden while ordering/accounts are off. -->
+        <a href="#" id="navMyOrders" onclick="document.getElementById('nav').classList.remove('open');onAccountBtnClick('orders');return false;" style="display:none">My Orders</a>
+        <a href="#" id="navSignIn" onclick="document.getElementById('nav').classList.remove('open');openAuthModal('login');return false;">Sign In</a>
+        <a href="#" id="navWishlist" onclick="document.getElementById('nav').classList.remove('open');openWishlist();return false;">Wishlist <span id="navWishlistBadge" style="display:none"></span></a>
+        <a href="#" id="navCart" onclick="document.getElementById('nav').classList.remove('open');openCart();return false;">Cart <span id="navCartBadge" class="nav-cart-badge" style="display:none">0</span></a>
+        <a href="#" id="navTrackOrder" onclick="document.getElementById('nav').classList.remove('open');openOrderTracker();return false;">Track Order</a>
+        <a href="#" id="navCancelOrder" onclick="document.getElementById('nav').classList.remove('open');openOrderTracker();switchOrderTab('cancel');return false;">Cancel Order</a>
       </nav>
       <div class="header-actions">
         <div class="header-search-wrap" id="headerSearchWrap">
-          <button class="header-search-btn" id="headerSearchBtn" onclick="toggleHeaderSearch()" aria-label="Search products"><i class="fa fa-search"></i></button>
-          <input type="search" id="headerSearchInput" class="header-search-input" placeholder="Search parts or part numbers..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" oninput="onHeaderSearchInput(this.value)" onkeydown="if(event.key==='Escape'){toggleHeaderSearch(false);}else if(event.key==='Enter'){event.preventDefault();submitHeaderSearch();}" />
+          <button class="header-search-btn" id="headerSearchBtn" onclick="toggleHeaderSearch()" aria-label="Search parts"><i class="fa fa-search"></i></button>
+          <input type="search" id="headerSearchInput" class="header-search-input" placeholder="Part name or number…" aria-label="Search parts by name or part number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" oninput="onHeaderSearchInput(this.value)" onkeydown="if(event.key==='Escape'){toggleHeaderSearch(false);}else if(event.key==='Enter'){event.preventDefault();submitHeaderSearch();}" />
         </div>
+        <a class="rd-hbtn rd-hcall" href="tel:+96599115215" aria-label="Call +965 9911 5215"><i class="fa fa-phone" aria-hidden="true"></i><span>9911 5215</span></a>
+        <a class="rd-hbtn rd-hwa" href="https://wa.me/96599115215" target="_blank" rel="noopener"><i class="fab fa-whatsapp" aria-hidden="true"></i><span>WhatsApp</span></a>
         <button class="lang-btn" id="langBtn" onclick="toggleLang()">عربي</button>
         <button class="hamburger" id="hamburger" aria-label="Open menu"><i class="fa fa-bars"></i></button>
-        <button class="btn-account" id="accountBtn" onclick="onAccountBtnClick()">
-          <i class="fa fa-user"></i>
-          <span class="acct-txt" id="acctBtnLabel">Sign In</span>
-        </button>
+        <button class="btn-account" id="accountBtn" onclick="onAccountBtnClick()"><i class="fa fa-user"></i><span class="acct-txt" id="acctBtnLabel">Sign In</span></button>
       </div>
     </div>
   </header>
@@ -368,205 +276,134 @@
   <main id="main-content">
   <h1 class="visually-hidden">Alamdar Auto Spare Parts Co. Kuwait — Genuine European Car Parts, Shuwaikh</h1>
 
-  <!-- HERO SHOWCASE — low-GPU car stage (code/js/08-hero.js,
-       code/css/10-hero.css). Replaced the moving offers strip (#offers) in Nov 2026;
-       initOffersTicker() in js/02-catalog-render.js no-ops without #offersTrack. -->
-  <section id="showcase" class="ge-hero" aria-labelledby="heroTitle">
-    <!-- Performance: keep the existing CSS studio gradient, but omit the full-screen
-         WebGPU canvas. 08-hero.js checks for this canvas and skips importing the
-         shader; the car carousel, buttons and product callouts still run. -->
-    <div class="ge-hero-bg" aria-hidden="true"></div>
-    <div class="ge-hero-inner">
-      <!-- Showpiece: the giant outlined make + the car (HERO_CARS in
-           code/js/08-hero.js). JS ADDS .no-car to #showcase only when that
-           list is empty; with none the stage collapses and the copy below
-           falls back to a plain left-aligned hero.
-           The default here must stay car-mode, NOT .no-car. Shipping
-           .no-car left the stage at display:none until the runtime-injected
-           JS arrived, and un-hiding a 320-560px stage mid-load shoved the
-           whole page down: a measured CLS of 0.336 on Slow 4G, against a
-           target of < 0.1. Car-mode by default reserves the stage's height
-           in the first paint. The cost if JS never runs is an empty
-           stage-sized gap, which is much the cheaper failure. -->
-      <div class="ge-hero-stage" id="heroStage"></div>
-      <div class="ge-hero-copy">
-        <h2 class="ge-hero-title" id="heroTitle" data-i18n-html="hero_h1">Engineered in <span>Germany.</span><br/>Delivered in <span>Kuwait.</span></h2>
-        <p class="ge-hero-text" data-i18n="hero_p">Genuine auto spare parts for Mercedes-Benz, BMW, Audi, Volkswagen, Porsche, Jaguar, Range Rover and Toyota — delivered across Kuwait.</p>
-        <!-- One CTA, no icon (owner's call, 2026-11-10). The "Shop by Make"
-             button and the three-item trust row that sat under it were
-             removed. Nothing else was deleted: .ge-btn-ghost and
-             .ge-hero-trust are still styled and the hero_make / hero_t1-3
-             strings (en + ar) are still in code/js/04-i18n-order.js, so any
-             of it is one line to put back. Shopping by make is still
-             reachable from the #makes section and from the hero caption. -->
-        <div class="ge-hero-btns">
-          <a href="#products" class="btn btn-primary ge-hero-cta" data-i18n="hero_shop">Shop Parts</a>
+  <!-- 1. HERO — scroll-driven parts board (code/js/30-v3.js). The parts fly in from
+       off-screen as you scroll the first screens and settle into a labelled board.
+       Tied to scroll position, so it plays once, in either direction, and never loops.
+       It is a static scene, no car stage. -->
+  <section id="v3Scene" class="v3-scene" aria-labelledby="heroTitle">
+    <noscript><style>.v3-scene { --p: 1; height: auto; } .v3-stick { position: static; height: auto; }</style></noscript>
+    <div class="v3-stick">
+      <div class="v3-in">
+        <p class="v3-tag">Genuine &amp; OEM parts · Shuwaikh, Kuwait</p>
+        <h2 class="v3-title" id="heroTitle">Spare parts for <em>German</em> &amp; European cars</h2>
+        <p class="v3-sub">Brakes, filters, suspension, lights and more. In stock in Shuwaikh and delivered across Kuwait.</p>
+        <div class="v3-cta">
+          <a class="v3-btn v3-btn-solid" href="#products">Browse the parts</a>
+          <a class="v3-btn v3-btn-line" href="https://wa.me/96599115215" target="_blank" rel="noopener"><i class="fab fa-whatsapp" aria-hidden="true"></i> Ask on WhatsApp</a>
         </div>
       </div>
+      <ul class="v3-board" id="v3Board">
+        <li class="v3-slot" style="--s:0.000;--sx:-120vw;--sy:-40vh;--sr:-70deg"><button type="button" class="v3-part t1" onclick="filterProducts('engine')"><img src="img/parts/engine.webp" alt="" width="320" height="170" loading="eager" decoding="async"><span class="v3-pn">Engine parts</span><span class="v3-pc">Engine</span></button></li>
+        <li class="v3-slot" style="--s:0.045;--sx:0vw;--sy:-120vh;--sr:55deg"><button type="button" class="v3-part t2" onclick="filterProducts('brakes')"><img src="img/parts/brake-disc.webp" alt="" width="320" height="170" loading="eager" decoding="async"><span class="v3-pn">Brake discs</span><span class="v3-pc">Brakes</span></button></li>
+        <li class="v3-slot" style="--s:0.090;--sx:120vw;--sy:-50vh;--sr:80deg"><button type="button" class="v3-part t3" onclick="filterProducts('brakes')"><img src="img/parts/remsa-brake-pads.webp" alt="" width="320" height="170" loading="eager" decoding="async"><span class="v3-pn">Brake pads</span><span class="v3-pc">Brakes</span></button></li>
+        <li class="v3-slot" style="--s:0.135;--sx:-120vw;--sy:30vh;--sr:40deg"><button type="button" class="v3-part t2" onclick="filterProducts('filters')"><img src="img/parts/air-filter.webp" alt="" width="320" height="170" loading="eager" decoding="async"><span class="v3-pn">Air filters</span><span class="v3-pc">Filters</span></button></li>
+        <li class="v3-slot" style="--s:0.180;--sx:-20vw;--sy:120vh;--sr:-90deg"><button type="button" class="v3-part t3" onclick="filterProducts('electrical')"><img src="img/parts/bosch-spark-plug.webp" alt="" width="320" height="170" loading="eager" decoding="async"><span class="v3-pn">Spark plugs</span><span class="v3-pc">Electrical</span></button></li>
+        <li class="v3-slot" style="--s:0.225;--sx:120vw;--sy:20vh;--sr:-45deg"><button type="button" class="v3-part t1" onclick="filterProducts('cooling')"><img src="img/parts/behr-radiator.webp" alt="" width="320" height="170" loading="eager" decoding="async"><span class="v3-pn">Radiators</span><span class="v3-pc">Cooling</span></button></li>
+        <li class="v3-slot" style="--s:0.270;--sx:-120vw;--sy:70vh;--sr:65deg"><button type="button" class="v3-part t3" onclick="filterProducts('body-lights')"><img src="img/parts/audi-headlight.webp" alt="" width="320" height="170" loading="eager" decoding="async"><span class="v3-pn">Headlights</span><span class="v3-pc">Body &amp; lights</span></button></li>
+        <li class="v3-slot" style="--s:0.315;--sx:40vw;--sy:120vh;--sr:-60deg"><button type="button" class="v3-part t1" onclick="filterProducts('suspension')"><img src="img/parts/suspension-assembly.webp" alt="" width="320" height="170" loading="eager" decoding="async"><span class="v3-pn">Suspension</span><span class="v3-pc">Suspension</span></button></li>
+        <li class="v3-slot" style="--s:0.360;--sx:120vw;--sy:80vh;--sr:75deg"><button type="button" class="v3-part t2" onclick="filterProducts('suspension')"><img src="img/parts/lemforder-control-arm.webp" alt="" width="320" height="170" loading="eager" decoding="async"><span class="v3-pn">Control arms</span><span class="v3-pc">Suspension</span></button></li>
+        <li class="v3-slot" style="--s:0.405;--sx:0vw;--sy:-120vh;--sr:-55deg"><button type="button" class="v3-part t3" onclick="filterProducts('body-lights')"><img src="img/parts/front-bumper.webp" alt="" width="320" height="170" loading="eager" decoding="async"><span class="v3-pn">Bumpers</span><span class="v3-pc">Body &amp; lights</span></button></li>
+      </ul>
     </div>
   </section>
 
-  <!-- WORKSHOP COLLAGE — directly under the hero (owner, 2026-11-15: the collage
-       stays up here, only the service heading/cards went to the end of the page).
-       Filled by renderServiceCollage() in code/js/09-services.js from the
-       expert_settings 'services' row: ONE picture (img/services/collage, two WebP
-       widths) the owner composed, with a label over each of its four photos.
-       Full-bleed on purpose — outside any .container. Styling: .svc-band /
-       .svc-collage in code/css/12-services.css. -->
+  <!-- 1b. FINDER — pick the car, see its parts. Same ids as before (10-redesign.js). -->
+  <section class="v3-finder-sec" aria-label="Find parts for your car">
+    <div class="container v3-finder-in">
+      <div class="v3-finder-copy"><span class="v3-kicker">Find the right fit</span><h2 class="v3-h2">Tell us your car, we&rsquo;ll show the <em>parts</em></h2></div>
+      <form class="rd-finder" id="rdFinder" onsubmit="rdFinderShow(event)" aria-labelledby="rdFinderTitle">
+          <div class="rd-finder-head"><h3 id="rdFinderTitle">What do you drive?</h3><span class="rd-finder-step">Find your part</span></div>
+          <label class="rd-field"><span>Make</span>
+            <select class="rd-select" id="rdMake">
+              <option value="">Choose make</option>
+              <option value="mercedes">Mercedes-Benz</option><option value="bmw">BMW</option><option value="audi">Audi</option>
+              <option value="volkswagen">Volkswagen</option><option value="porsche">Porsche</option><option value="range-rover">Range Rover</option>
+              <option value="jaguar">Jaguar</option><option value="toyota">Toyota</option>
+            </select>
+          </label>
+          <div class="rd-finder-row">
+            <label class="rd-field"><span>Model</span><select class="rd-select" id="rdModel" disabled><option value="">—</option></select></label>
+            <label class="rd-field"><span>Year</span><select class="rd-select" id="rdGen" disabled><option value="">—</option></select></label>
+          </div>
+          <div class="rd-finder-btns">
+            <button type="submit" class="rd-btn rd-btn-red">Show parts for my car <i class="fa fa-arrow-right" aria-hidden="true"></i></button>
+            <button type="button" class="rd-btn rd-btn-line" onclick="rdFinderAsk()"><i class="fab fa-whatsapp" aria-hidden="true"></i> Ask us about my car</button>
+          </div>
+          <p class="rd-finder-note">Not sure which part? Send your VIN on WhatsApp and we'll confirm it before you pay.</p>
+        </form>
+    </div>
+  </section>
+
+  <!-- 2. WORKSHOP COLLAGE — stays directly under the hero (owner, 2026-11-15).
+       Filled by renderServiceCollage() in code/js/09-services.js. -->
   <section id="workshopBand" class="svc-band" aria-label="Our workshop">
     <div id="servicesBands"></div>
   </section>
 
-  <!-- Shop by make: filters the catalog by expert_settings.fitment_map (see setMakeFilter() in js/02-catalog-render.js) -->
-  <section id="makes" class="makes-section" aria-label="Shop by car make">
+  <!-- 3. CARS WE FIT — swipe row of car cards (img/hero/<car>-sm.webp cut-outs). Each
+       card calls rdPickMake() (10-redesign.js). To change a car's photo, replace the file
+       or change its src below. Static: nothing moves. -->
+  <section id="brandBanners" class="rd-makes v3-cars" aria-labelledby="makesTitle">
     <div class="container">
-      <div class="section-header"><span class="section-tag" data-i18n="make_tag">Shop by Make</span></div>
-      <div class="make-row" id="makeRow">
-        <button type="button" class="make-chip" data-make="mercedes" aria-pressed="false" onclick="setMakeFilter('mercedes')">Mercedes-Benz</button>
-        <button type="button" class="make-chip" data-make="bmw" aria-pressed="false" onclick="setMakeFilter('bmw')">BMW</button>
-        <button type="button" class="make-chip" data-make="audi" aria-pressed="false" onclick="setMakeFilter('audi')">Audi</button>
-        <button type="button" class="make-chip" data-make="volkswagen" aria-pressed="false" onclick="setMakeFilter('volkswagen')">Volkswagen</button>
-        <button type="button" class="make-chip" data-make="porsche" aria-pressed="false" onclick="setMakeFilter('porsche')">Porsche</button>
-        <button type="button" class="make-chip" data-make="mini" aria-pressed="false" onclick="setMakeFilter('mini')">MINI</button>
-        <button type="button" class="make-chip" data-make="opel" aria-pressed="false" onclick="setMakeFilter('opel')">Opel</button>
-        <button type="button" class="make-chip" data-make="landrover" aria-pressed="false" onclick="setMakeFilter('landrover')">Range Rover</button>
-        <button type="button" class="make-chip" data-make="jaguar" aria-pressed="false" onclick="setMakeFilter('jaguar')">Jaguar</button>
-        <button type="button" class="make-chip" data-make="toyota" aria-pressed="false" onclick="setMakeFilter('toyota')">Toyota</button>
-      </div>
+      <div class="v3-cars-head"><span class="v3-kicker v3-kicker-lt">Cars we fit</span><h2 class="v3-h2 v3-h2-lt" id="makesTitle">Whatever you drive, <em>we have the part</em></h2></div>
     </div>
+    <ul class="v3-car-row" aria-label="Car makes">
+        <li class="v3-car-li"><button type="button" class="rd-make v3-car" data-make="mercedes" aria-pressed="false" onclick="rdPickMake('mercedes')"><img class="v3-car-logo" src="img/brands/logo-mercedes.svg" alt="" width="36" height="36" loading="lazy"><span class="v3-car-name">Mercedes-Benz</span><span class="v3-car-model">E-Class</span><img class="v3-car-img" src="img/hero/mercedes-e-class-sm.webp" alt="" width="380" height="170" loading="lazy"></button></li>
+        <li class="v3-car-li"><button type="button" class="rd-make v3-car" data-make="bmw" aria-pressed="false" onclick="rdPickMake('bmw')"><img class="v3-car-logo" src="img/brands/logo-bmw.svg" alt="" width="36" height="36" loading="lazy"><span class="v3-car-name">BMW</span><span class="v3-car-model">M4</span><img class="v3-car-img" src="img/hero/bmw-m4-sm.webp" alt="" width="380" height="170" loading="lazy"></button></li>
+        <li class="v3-car-li"><button type="button" class="rd-make v3-car" data-make="audi" aria-pressed="false" onclick="rdPickMake('audi')"><img class="v3-car-logo" src="img/brands/logo-audi.svg" alt="" width="36" height="36" loading="lazy"><span class="v3-car-name">Audi</span><span class="v3-car-model">A6</span><img class="v3-car-img" src="img/hero/audi-a6-sm.webp" alt="" width="380" height="170" loading="lazy"></button></li>
+        <li class="v3-car-li"><button type="button" class="rd-make v3-car" data-make="volkswagen" aria-pressed="false" onclick="rdPickMake('volkswagen')"><img class="v3-car-logo" src="img/brands/logo-volkswagen.svg" alt="" width="36" height="36" loading="lazy"><span class="v3-car-name">Volkswagen</span><span class="v3-car-model">Touareg</span><img class="v3-car-img" src="img/hero/vw-touareg-sm.webp" alt="" width="380" height="170" loading="lazy"></button></li>
+        <li class="v3-car-li"><button type="button" class="rd-make v3-car" data-make="porsche" aria-pressed="false" onclick="rdPickMake('porsche')"><img class="v3-car-logo" src="img/brands/logo-porsche.svg" alt="" width="36" height="36" loading="lazy"><span class="v3-car-name">Porsche</span><span class="v3-car-model">911</span><img class="v3-car-img" src="img/hero/porsche-911-sm.webp" alt="" width="380" height="170" loading="lazy"></button></li>
+        <li class="v3-car-li"><button type="button" class="rd-make v3-car" data-make="landrover" aria-pressed="false" onclick="rdPickMake('landrover')"><img class="v3-car-logo" src="img/brands/logo-landrover.svg" alt="" width="36" height="36" loading="lazy"><span class="v3-car-name">Range Rover</span><span class="v3-car-model">Sport</span><img class="v3-car-img" src="img/hero/range-rover-sport-sm.webp" alt="" width="380" height="170" loading="lazy"></button></li>
+        <li class="v3-car-li"><button type="button" class="rd-make v3-car" data-make="jaguar" aria-pressed="false" onclick="rdPickMake('jaguar')"><img class="v3-car-logo" src="img/brands/logo-jaguar.svg" alt="" width="36" height="36" loading="lazy"><span class="v3-car-name">Jaguar</span><span class="v3-car-model">F-Type</span><img class="v3-car-img" src="img/hero/jaguar-f-type-sm.webp" alt="" width="380" height="170" loading="lazy"></button></li>
+    </ul>
   </section>
 
-  <!-- TWO BANNERS (owner, 2026-11-16): the cars we cover + the parts brands we carry.
-       Static HTML on purpose (crawlable, no JS, and the owner had the moving red
-       brand strip removed, so nothing here scrolls). Car tiles call shopMake()
-       (js/02-catalog-render.js); brand tiles are plain wordmarks. The brand list is
-       edited right here. Styles: "BRAND BANNERS" at the end of css/02-sections.css. -->
-  <section id="brandBanners" aria-label="Cars and brands we supply">
-    <div class="bb bb-cars">
-      <div class="container">
-        <div class="bb-head"><span class="bb-tag">Cars we cover</span><h2>Genuine &amp; OEM-quality parts for</h2></div>
-        <ul class="bb-grid bb-grid-cars">
-          <li><button type="button" class="bb-car" onclick="shopMake('mercedes')"><img src="img/brands/logo-mercedes.svg" alt="" width="48" height="48" loading="lazy"><span>Mercedes-Benz</span></button></li>
-          <li><button type="button" class="bb-car" onclick="shopMake('bmw')"><img src="img/brands/logo-bmw.svg" alt="" width="48" height="48" loading="lazy"><span>BMW</span></button></li>
-          <li><button type="button" class="bb-car" onclick="shopMake('audi')"><img src="img/brands/logo-audi.svg" alt="" width="48" height="48" loading="lazy"><span>Audi</span></button></li>
-          <li><button type="button" class="bb-car" onclick="shopMake('volkswagen')"><img src="img/brands/logo-volkswagen.svg" alt="" width="48" height="48" loading="lazy"><span>Volkswagen</span></button></li>
-          <li><button type="button" class="bb-car" onclick="shopMake('porsche')"><img src="img/brands/logo-porsche.svg" alt="" width="48" height="48" loading="lazy"><span>Porsche</span></button></li>
-          <li><button type="button" class="bb-car" onclick="shopMake('landrover')"><img src="img/brands/logo-landrover.svg" alt="" width="48" height="48" loading="lazy"><span>Range Rover</span></button></li>
-          <li><button type="button" class="bb-car" onclick="shopMake('jaguar')"><img src="img/brands/logo-jaguar.svg" alt="" width="48" height="48" loading="lazy"><span>Jaguar</span></button></li>        </ul>
-      </div>
-    </div>
-    <div class="bb bb-brands">
-      <div class="container">
-        <div class="bb-head"><span class="bb-tag">Parts brands</span><h2>Trusted names we fit and supply</h2></div>
-        <ul class="bb-grid bb-grid-brands">
-          <li class="bb-brand"><img src="img/brands/brand-remsa.png" alt="Remsa" width="407" height="120" loading="lazy"></li>
-          <li class="bb-brand"><img src="img/brands/brand-febi.png" alt="Febi Bilstein" width="123" height="120" loading="lazy"></li>
-          <li class="bb-brand"><img src="img/brands/brand-itrust.png" alt="iTrust" width="252" height="259" loading="lazy"></li>
-          <li class="bb-brand"><img src="img/brands/brand-lemforder.png" alt="Lemf&ouml;rder" width="420" height="99" loading="lazy"></li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- Two vertical banners, each auto-rotating through category slides in sync (see initSideBanners() in js/02-catalog-render.js) -->
+  <!-- 4. CATEGORIES — same tiles/data-cat/onclick as before (JS reorders and
+       relabels them); the photo grid layout is in 20-redesign.css. -->
   <section id="categories">
     <div class="container">
-      <div class="section-header">
-        <span class="section-tag" data-i18n="cat_tag">Shop by Category</span>
+      <div class="rd-sec-head">
+        <div class="rd-sec-head-main"><span class="rd-idx">02</span><div><span class="rd-eyebrow">Shop by part</span><h2 class="rd-h2">What does it <em>need?</em></h2></div></div>
+        <p class="rd-sec-sub">Service items to major repairs: engine, brakes, suspension, cooling and more.</p>
       </div>
       <div class="categories-grid" id="categoriesGrid">
-        <div class="cat-card" data-cat="engine" onclick="filterProducts('engine')">
-          <i class="cat-icon fa fa-gears" aria-hidden="true"></i>
-          <h3>Engine Parts</h3>
-          <p>Belts, Gaskets, Pumps &amp; Mounts</p>
-        </div>
-        <div class="cat-card" data-cat="brakes" onclick="filterProducts('brakes')">
-          <i class="cat-icon fa fa-circle-stop" aria-hidden="true"></i>
-          <h3>Brakes</h3>
-          <p>Pads, Discs, Sensors &amp; Fluid</p>
-        </div>
-        <div class="cat-card" data-cat="suspension" onclick="filterProducts('suspension')">
-          <i class="cat-icon fa fa-car-side" aria-hidden="true"></i>
-          <h3>Suspension &amp; Steering</h3>
-          <p>Shocks, Arms, Links &amp; Bushes</p>
-        </div>
-        <div class="cat-card" data-cat="filters" onclick="filterProducts('filters')">
-          <i class="cat-icon fa fa-filter" aria-hidden="true"></i>
-          <h3>Filters</h3>
-          <p>Oil, Air, Fuel &amp; Cabin</p>
-        </div>
-        <div class="cat-card" data-cat="electrical" onclick="filterProducts('electrical')">
-          <i class="cat-icon fa fa-bolt" aria-hidden="true"></i>
-          <h3>Electrical &amp; Ignition</h3>
-          <p>Spark Plugs, Coils, Sensors</p>
-        </div>
-        <div class="cat-card" data-cat="cooling" onclick="filterProducts('cooling')">
-          <i class="cat-icon fa fa-snowflake" aria-hidden="true"></i>
-          <h3>Cooling &amp; A/C</h3>
-          <p>Radiators, Thermostats, Fans</p>
-        </div>
-        <div class="cat-card" data-cat="oils-fluids" onclick="filterProducts('oils-fluids')">
-          <i class="cat-icon fa fa-oil-can" aria-hidden="true"></i>
-          <h3>Oils &amp; Fluids</h3>
-          <p>Engine Oil, Coolant, ATF</p>
-        </div>
-        <div class="cat-card" data-cat="transmission" onclick="filterProducts('transmission')">
-          <i class="cat-icon fa fa-gear" aria-hidden="true"></i>
-          <h3>Transmission &amp; Clutch</h3>
-          <p>Clutch Kits, Mounts, Filters</p>
-        </div>
-        <div class="cat-card" data-cat="exhaust" onclick="filterProducts('exhaust')">
-          <i class="cat-icon fa fa-wind" aria-hidden="true"></i>
-          <h3>Exhaust</h3>
-          <p>Sensors, Mounts &amp; Pipes</p>
-        </div>
-        <div class="cat-card" data-cat="body-lights" onclick="filterProducts('body-lights')">
-          <i class="cat-icon fa fa-lightbulb" aria-hidden="true"></i>
-          <h3>Body &amp; Lighting</h3>
-          <p>Lamps, Mirrors, Wipers</p>
-        </div>
-        <div class="cat-card" data-cat="accessories" onclick="filterProducts('accessories')">
-          <i class="cat-icon fa fa-toolbox" aria-hidden="true"></i>
-          <h3>Accessories</h3>
-          <p>Care, Tools &amp; Interior</p>
-        </div>
-        <div class="cat-card" data-cat="all" onclick="filterProducts('all')">
-          <i class="cat-icon fa fa-car" aria-hidden="true"></i>
-          <h3>All Parts</h3>
-          <p>Browse our full catalog</p>
-        </div>
+        <div class="cat-card" data-cat="engine" onclick="filterProducts('engine')"><i class="cat-icon fa fa-gears" aria-hidden="true"></i><h3>Engine Parts</h3><p>Belts, gaskets, pumps &amp; mounts</p></div>
+        <div class="cat-card" data-cat="brakes" onclick="filterProducts('brakes')"><i class="cat-icon fa fa-circle-stop" aria-hidden="true"></i><h3>Brakes</h3><p>Pads, discs, sensors &amp; fluid</p></div>
+        <div class="cat-card" data-cat="suspension" onclick="filterProducts('suspension')"><i class="cat-icon fa fa-car-side" aria-hidden="true"></i><h3>Suspension &amp; Steering</h3><p>Shocks, arms, links &amp; bushes</p></div>
+        <div class="cat-card" data-cat="filters" onclick="filterProducts('filters')"><i class="cat-icon fa fa-filter" aria-hidden="true"></i><h3>Filters</h3><p>Oil, air, fuel &amp; cabin</p></div>
+        <div class="cat-card" data-cat="electrical" onclick="filterProducts('electrical')"><i class="cat-icon fa fa-bolt" aria-hidden="true"></i><h3>Electrical &amp; Ignition</h3><p>Spark plugs, coils, sensors</p></div>
+        <div class="cat-card" data-cat="cooling" onclick="filterProducts('cooling')"><i class="cat-icon fa fa-snowflake" aria-hidden="true"></i><h3>Cooling &amp; A/C</h3><p>Radiators, thermostats, fans</p></div>
+        <div class="cat-card" data-cat="oils-fluids" onclick="filterProducts('oils-fluids')"><i class="cat-icon fa fa-oil-can" aria-hidden="true"></i><h3>Oils &amp; Fluids</h3><p>Engine oil, coolant, ATF</p></div>
+        <div class="cat-card" data-cat="transmission" onclick="filterProducts('transmission')"><i class="cat-icon fa fa-gear" aria-hidden="true"></i><h3>Transmission &amp; Clutch</h3><p>Clutch kits, mounts, filters</p></div>
+        <div class="cat-card" data-cat="exhaust" onclick="filterProducts('exhaust')"><i class="cat-icon fa fa-wind" aria-hidden="true"></i><h3>Exhaust</h3><p>Sensors, mounts &amp; pipes</p></div>
+        <div class="cat-card" data-cat="body-lights" onclick="filterProducts('body-lights')"><i class="cat-icon fa fa-lightbulb" aria-hidden="true"></i><h3>Body &amp; Lighting</h3><p>Lamps, mirrors, wipers</p></div>
+        <div class="cat-card" data-cat="accessories" onclick="filterProducts('accessories')"><i class="cat-icon fa fa-toolbox" aria-hidden="true"></i><h3>Accessories</h3><p>Care, tools &amp; interior</p></div>
+        <div class="cat-card" data-cat="all" onclick="filterProducts('all')"><i class="cat-icon fa fa-car" aria-hidden="true"></i><h3>All Parts</h3><p>Browse the full catalogue</p></div>
       </div>
     </div>
   </section>
 
-
+  <!-- 5. CATALOGUE — every id/class the catalogue JS looks up is unchanged. -->
   <section id="products">
-    <!-- Rotating brand banners — start where the products start and stay
-         pinned beside the product grid while it scrolls (sticky inside each
-         rail, which spans the section). Content is rendered by
-         initSideBanners() in js/02-catalog-render.js (falls back to Banners/
-         defaults, or whatever the admin has configured in Supabase). -->
     <div class="side-banner-rail left"><div class="side-banner-slot left"><div class="side-banner" id="bannerLeft"></div></div></div>
     <div class="side-banner-rail right"><div class="side-banner-slot right"><div class="side-banner" id="bannerRight"></div></div></div>
     <div class="container">
-      <!-- Home › Products › Category — filled by renderCatCrumbs() in js/02-catalog-render.js while a category is open -->
+      <div class="rd-sec-head">
+        <div class="rd-sec-head-main"><span class="rd-idx">03</span><div><span class="rd-eyebrow">The catalogue</span><h2 class="rd-h2">Parts in <em>stock</em></h2></div></div>
+        <p class="rd-sec-sub">Prices change with the market, so tap any part and we'll send you today's price and availability on WhatsApp.</p>
+      </div>
       <nav class="cat-crumbs" id="catCrumbs" aria-label="Breadcrumb"></nav>
       <div class="products-controls">
-        <!-- autocomplete="off" on the form prevents browser from offering saved credentials -->
         <form class="search-wrap" onsubmit="submitGridSearch();return false" autocomplete="off" role="search">
           <i class="fa fa-search"></i>
-          <input type="search" id="searchInput" placeholder="Search by part name or part number..." data-i18n-placeholder="prod_search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          <input type="search" id="searchInput" placeholder="Search by part name or part number…" aria-label="Search by part name or part number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
         </form>
         <div class="sort-wrap">
           <i class="fa fa-arrow-down-wide-short"></i>
           <label for="sortSelect" class="visually-hidden">Sort products</label>
           <select id="sortSelect" onchange="onSortChange(this.value)">
-            <option value="recommended">Recommended</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
-            <option value="newest">Newest</option>
-            <option value="name-asc">Name: A to Z</option>
-            <option value="name-desc">Name: Z to A</option>
+            <option value="recommended">Recommended</option><option value="price-asc">Price: Low to High</option><option value="price-desc">Price: High to Low</option>
+            <option value="newest">Newest</option><option value="name-asc">Name: A to Z</option><option value="name-desc">Name: Z to A</option>
           </select>
         </div>
         <div class="filter-pills">
@@ -583,24 +420,7 @@
           <button class="pill" data-filter="body-lights">Body &amp; Lighting</button>
           <button class="pill" data-filter="accessories">Accessories</button>
         </div>
-        <!-- Active car-make filter. The "Shop by Make" section was removed on
-             2026-11-11, but the hero's "Shop <Make> parts" captions still call
-             setMakeFilter() — and activeMake is cleared by nothing else, so
-             without a visible control a visitor who tapped one would be stuck
-             looking at a filtered catalog with no way back and no idea why.
-             Rendered and cleared by renderActiveMake() in js/02-catalog-render.js;
-             stays display:none while activeMake is 'all'. -->
         <div class="active-make" id="activeMake" hidden></div>
-        <!-- Reorders the category tile grid + pill row to match the admin's
-             saved order BEFORE the rest of the page finishes parsing, using
-             whatever order localStorage cached on the last visit (see
-             loadSBData() in js/01-config-data.js). Without this, the page
-             painted the hardcoded HTML order first and only jumped to the
-             real saved order once the Supabase fetch resolved a moment
-             later — visible every single load. This can still show the
-             hardcoded order once on a browser's very first-ever visit
-             (nothing cached yet), but every load after that is correct
-             from the start. -->
         <script>
         (function() {
           try {
@@ -618,53 +438,29 @@
             reorder(document.getElementById('categoriesGrid'), 'data-cat');
             reorder(document.querySelector('.filter-pills'), 'data-filter');
           } catch (e) {}
-          // Same idea as the reorder above, but for renamed categories (e.g.
-          // "Marhaba" -> "Generators" from the admin's category editor) —
-          // without this, the hardcoded HTML name flashed on screen for a
-          // moment before applyCatLabelOverrides() (js/02-catalog-render.js)
-          // fixed it once the async Supabase fetch resolved.
           try {
             var labels = JSON.parse(localStorage.getItem('cat_labels_cache') || 'null');
             if (!labels) return;
             Object.keys(labels).forEach(function(slug) {
-              var label = labels[slug];
               var pill = document.querySelector('.pill[data-filter="' + slug + '"]');
-              if (pill) pill.textContent = label;
+              if (pill) pill.textContent = labels[slug];
               var card = document.querySelector('.cat-card[data-cat="' + slug + '"] h3');
-              if (card) card.textContent = label;
+              if (card) card.textContent = labels[slug];
             });
           } catch (e) {}
         })();
         </script>
         <div class="sub-filter-pills" id="subFilterPills"></div>
       </div>
-      <!-- Shown when the typed search found nothing but a nearby spelling did
-           (see _didYouMean/renderProducts in js/02-catalog-render.js) — the
-           grid below is already showing the corrected results, not a dead end. -->
       <div class="search-correction-notice" id="searchCorrectionNotice" style="display:none"></div>
       <div class="products-grid" id="productsGrid"></div>
-      <!-- The grid renders in batches instead of all ~1,550 matching cards at
-           once (that was ~30,000 DOM nodes / 1,700 <img> elements on a phone,
-           which made the first paint and every scroll genuinely slow). This
-           sentinel sits below the last rendered batch; _gridWatchScroll in
-           js/02-catalog-render.js watches it on scroll and appends the next
-           batch once it nears the viewport, so scrolling still feels like one
-           continuous grid. The button is the explicit fallback for the case
-           where scroll events never arrive, and is what shows for a moment if
-           a visitor lands right on the sentinel. -->
       <div class="grid-sentinel" id="gridSentinel" style="display:none">
-        <button class="btn btn-primary grid-more-btn" id="gridMoreBtn" onclick="_gridAppendBatch()" data-i18n="load_more">Load more products</button>
+        <button class="btn btn-primary grid-more-btn" id="gridMoreBtn" onclick="_gridAppendBatch()">Load more parts</button>
       </div>
       <div class="products-empty" id="productsEmpty" style="display:none">
         <i class="fa fa-box-open"></i>
-        <p data-i18n="no_results">No products found. Try a different search.</p>
+        <p>No parts found. Try a different name or part number, or ask us on WhatsApp.</p>
       </div>
-      <!-- Every matching product still gets a real crawlable <a> here, because
-           the grid above now only renders the first batch. display:none keeps
-           it out of layout/paint entirely (~2 nodes per product, no images, no
-           observers) while preserving the internal links Google used to reach
-           the per-product pages from the homepage. Built once, by
-           _renderSeoProductLinks() in js/02-catalog-render.js. -->
       <div id="seoProductLinks" style="display:none" aria-hidden="true"></div>
     </div>
   </section>
@@ -700,248 +496,137 @@
     </div>
   </section>
 
-
-  <section id="features">
-    <div class="container features-grid">
-      <div class="feature-card">
-        <i class="fa fa-shipping-fast"></i>
-        <h3 data-i18n="feat_delivery_h">Delivery Across Kuwait</h3>
-        <p data-i18n="feat_delivery_p">Delivery available across Kuwait — message us on WhatsApp for timing.</p>
-      </div>
-      <div class="feature-card">
-        <i class="fa fa-certificate"></i>
-        <h3 data-i18n="feat_genuine_h">Genuine &amp; OEM</h3>
-        <p data-i18n="feat_genuine_p">Original and OEM-quality parts from trusted German brands such as Bosch, Mann, Mahle, Lemförder and ATE.</p>
-      </div>
-      <div class="feature-card">
-        <i class="fa fa-headset"></i>
-        <h3 data-i18n="feat_advice_h">Fitment Help</h3>
-        <p data-i18n="feat_advice_p">Send us your VIN or chassis number and our specialists will confirm the right part for your car.</p>
-      </div>
-      <div class="feature-card">
-        <i class="fa fa-tags"></i>
-        <h3 data-i18n="feat_pricing_h">Garage Pricing</h3>
-        <p data-i18n="feat_pricing_p">Trade prices available for garages, workshops and fleet operators.</p>
-      </div>
+  <!-- 6. PARTS BRANDS — white band, logos with no boxes (owner, 2026-11-16). -->
+  <section id="partsBrands" class="rd-brands" aria-labelledby="brandsTitle">
+    <div class="container rd-brands-inner">
+      <div><span class="rd-eyebrow">Parts brands</span><h2 class="rd-h2" id="brandsTitle">Names we <em>trust</em></h2></div>
+      <ul class="rd-brand-row">
+        <li><img src="img/brands/brand-remsa.png" alt="Remsa" width="407" height="120" loading="lazy"></li>
+        <li class="is-square"><img src="img/brands/brand-febi.png" alt="Febi Bilstein" width="123" height="120" loading="lazy"></li>
+        <li><img src="img/brands/brand-itrust.png" alt="iTrust" width="252" height="259" loading="lazy"></li>
+        <li><img src="img/brands/brand-lemforder.png" alt="Lemf&ouml;rder" width="420" height="99" loading="lazy"></li>
+      </ul>
     </div>
   </section>
 
-  <section id="faq">
-    <div class="container">
-      <div class="faq-head">
-        <span class="section-tag" data-i18n="faq_tag">Got Questions?</span>
-        <h2 data-i18n-html="faq_h2">Frequently Asked <span class="orange">Questions</span></h2>
-      </div>
-      <div class="faq-list">
-        <details class="faq-item">
-          <summary data-i18n="faq_q1">Where in Kuwait do you deliver?</summary>
-          <p data-i18n="faq_a1">We deliver across Kuwait — message us on WhatsApp with your area and we will confirm timing. You can also pick up from our store in Shuwaikh Industrial Area.</p>
-        </details>
-        <details class="faq-item">
-          <summary data-i18n="faq_q2">What payment methods do you accept?</summary>
-          <p data-i18n="faq_a2">We accept cash on delivery, card on delivery and bank transfer. Payment details are confirmed with you directly on WhatsApp after you place an order.</p>
-        </details>
-        <details class="faq-item">
-          <summary data-i18n="faq_q3">How do I make sure a part fits my car?</summary>
-          <p data-i18n="faq_a3">Filter by your car make, search by part number, or send us your VIN (chassis number) on WhatsApp — we will confirm the exact part before you pay.</p>
-        </details>
-        <details class="faq-item">
-          <summary data-i18n="faq_q4">Can I return or exchange a part?</summary>
-          <p data-i18n="faq_a4">All returns need prior approval — please contact us by phone or on WhatsApp before sending anything back, and we will arrange it with you.</p>
-        </details>
-        <details class="faq-item">
-          <summary data-i18n="faq_q5">How do I order or get help?</summary>
-          <p data-i18n="faq_a5">Find the part you need and tap Enquire — it opens WhatsApp with the part details ready to send. Our team confirms availability, price and delivery, and you pay on delivery or by bank transfer.</p>
-        </details>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact">
-    <div class="container contact-grid">
-      <div class="contact-info">
-        <div class="contact-logo-row">
-          <img src="logo.jpg" width="234" height="234" alt="Alamdar Auto" class="contact-logo-img" onerror="this.style.display='none'" />
-          <span class="contact-brand-txt" style="font-size:0.85em">ALAMDAR AUTO</span>
-        </div>
-        <span class="section-tag" data-i18n="contact_tag">Get In Touch</span>
-        <h2 data-i18n-html="contact_h2">We're Here to <span class="orange">Help</span></h2>
-        <p data-i18n="contact_p">Can't find a part? Send us your VIN or part number and our team will source it for you — in Arabic or English.</p>
-        <div class="contact-items">
-          <div class="contact-item">
-            <i class="fa fa-map-marker-alt"></i>
-            <div><strong data-i18n="contact_loc_label">Location</strong><a href="https://www.google.com/maps/search/?api=1&amp;query=Alamdar+Auto+Spare+Parts+Co+Shuwaikh+Industrial+Area+Kuwait" target="_blank" style="color:inherit;text-decoration:underline">View on Google Maps</a></div>
-          </div>
-          <div class="contact-item">
-            <i class="fa fa-envelope"></i>
-            <div><strong data-i18n="contact_email_label">Email</strong><span>info@alamdar-auto.com</span><!-- TODO-CONTACT --></div>
-          </div>
-          <div class="contact-item">
-            <i class="fa fa-phone"></i>
-            <div><strong data-i18n="contact_phone_label">Phone / WhatsApp</strong><span>+965 9911 5215 · Tel +965 2482 7072</span></div>
-          </div>
-          <div class="contact-item">
-            <i class="fa fa-clock"></i>
-            <div><strong data-i18n="contact_hours_label">Working Hours</strong><span data-i18n="contact_hours">Sat-Thu: 8 AM - 9 PM</span></div>
-          </div>
-        </div>
-        <div class="social-links">
-          <a href="https://wa.me/96599115215" target="_blank" aria-label="Chat with us on WhatsApp"><i class="fab fa-whatsapp"></i></a>
-        </div>
-      </div>
-      <form class="contact-form" id="contactForm">
-        <div class="form-row">
-          <div class="form-group">
-            <label data-i18n="form_name" for="contactName">Full Name</label>
-            <input type="text" id="contactName" data-i18n-placeholder="form_name_ph" placeholder="Your full name" required />
-          </div>
-          <div class="form-group">
-            <label data-i18n="form_phone" for="contactPhone">Phone / WhatsApp</label>
-            <input type="tel" id="contactPhone" placeholder="+965 XXXX XXXX" />
-          </div>
-        </div>
-        <div class="form-group">
-          <label data-i18n="form_email" for="contactEmail">Email</label>
-          <input type="email" id="contactEmail" placeholder="you@example.com" required />
-        </div>
-        <div class="form-group">
-          <label data-i18n="form_need" for="contactNeed">What do you need?</label>
-          <select id="contactNeed">
-            <option data-i18n="form_opt1">General Enquiry</option>
-            <option data-i18n="form_opt2">Part Request (VIN)</option>
-            <option data-i18n="form_opt3">Part Availability</option>
-            <option data-i18n="form_opt4">Garage / Trade Account</option>
-            <option data-i18n="form_opt5">Delivery Information</option>
-            <option data-i18n="form_opt6">Other</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label data-i18n="form_msg">Message</label>
-          <textarea rows="4" data-i18n-placeholder="form_msg_ph" placeholder="Car make, model, year, VIN and the part you need..."></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary full-width"><span data-i18n="form_send">Send Message</span> <i class="fa fa-paper-plane"></i></button>
-        <div class="form-success" id="formSuccess" data-i18n="form_success">Message sent! We will get back to you shortly.</div>
-      </form>
-    </div>
-  </section>
-
-  <section id="about">
-    <div class="container about-grid">
-      <div class="about-img-wrap">
-        <div class="about-img-card">
-          <img src="logo.jpg" width="234" height="234" alt="Alamdar Auto" onerror="this.style.display='none'" />
-        </div>
-        <div class="about-badge"><i class="fa fa-location-dot"></i> <span data-i18n="about_badge">Shuwaikh, Kuwait</span></div>
-      </div>
-      <div class="about-text">
-        <span class="section-tag" data-i18n="about_tag">Who We Are</span>
-        <h2 data-i18n-html="about_h2">Your <span class="orange">German Car</span> Parts Specialist</h2>
-        <p data-i18n="about_p1">Alamdar Auto Spare Parts Co. is an authorized distributor of auto spare parts in Kuwait, based in Shuwaikh Industrial Area. We specialise in parts for German and European cars — from service items like filters and brake pads to engine, suspension and electrical parts for Mercedes-Benz, BMW, Audi, Volkswagen, Porsche, Jaguar and Range Rover — plus Mercedes truck and Toyota parts.</p>
-        <p data-i18n="about_p2">We supply genuine and OEM-quality parts only, at fair prices, with real fitment advice in Arabic and English.</p>
-        <ul class="about-features">
-          <li><i class="fa fa-check-circle"></i> <span data-i18n="about_f1">Genuine and OEM-quality parts only</span></li>
-          <li><i class="fa fa-check-circle"></i> <span data-i18n="about_f2">Fitment checked by VIN on request</span></li>
-          <li><i class="fa fa-check-circle"></i> <span data-i18n="about_f3">Delivery across Kuwait</span></li>
-          <li><i class="fa fa-check-circle"></i> <span data-i18n="about_f4">Trade pricing for garages and workshops</span></li>
-          <li><i class="fa fa-check-circle"></i> <span data-i18n="about_f5">Easy returns and after-sales support</span></li>
-        </ul>
-        <div class="about-btns">
-          <a href="#contact" class="btn btn-primary"><i class="fa fa-phone"></i> <span data-i18n="about_cta">Contact Us</span></a>
-          <a href="https://www.google.com/maps/search/?api=1&amp;query=Alamdar+Auto+Spare+Parts+Co+Shuwaikh+Industrial+Area+Kuwait" target="_blank" class="btn btn-outline"><i class="fa fa-map-marker-alt"></i> Our Location</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- WORKSHOP SERVICES — now the LAST section of <main> (owner, 2026-11-15: parts
-       first, workshop at the end). Our mechanics service the car, not just supply the
-       part. Cards are rendered by renderServices() in code/js/09-services.js
-       from expert_settings.key='services' (admin panel → Services tab); the
-       heading copy below is the fallback the admin can override, and the whole
-       section hides itself if the owner switches it off or empties the list.
-       Styling: code/css/12-services.css. -->
+  <!-- 7. WORKSHOP SERVICES — cards rendered by renderServices() (09-services.js). -->
   <section id="services" aria-labelledby="servicesHeading">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag" id="servicesTag" data-i18n="svc_tag">Workshop &amp; Servicing</span>
-        <h2 id="servicesHeading" data-i18n-html="svc_h2">Our Mechanics <span class="orange">Service Your Car</span></h2>
-        <p class="svc-intro" id="servicesIntro" data-i18n="svc_p">German-car specialists in Shuwaikh, Kuwait — we don't just sell the part, we fit it. Book any job below on WhatsApp and we'll confirm the price and a slot for you.</p>
+        <span class="section-tag" id="servicesTag">04 · Workshop &amp; servicing</span>
+        <h2 id="servicesHeading">We don't just sell the part. <span class="orange">We fit it.</span></h2>
+        <p class="svc-intro" id="servicesIntro">German-car specialists in Shuwaikh. Book any job below on WhatsApp and we'll confirm the price and a slot for you.</p>
       </div>
       <div class="svc-trust">
-        <span><i class="fa fa-user-gear" aria-hidden="true"></i> <span data-i18n="svc_t1">German-car specialist mechanics</span></span>
-        <span><i class="fa fa-certificate" aria-hidden="true"></i> <span data-i18n="svc_t2">Genuine &amp; OEM parts fitted</span></span>
-        <span><i class="fa fa-shield-halved" aria-hidden="true"></i> <span data-i18n="svc_t3">Workmanship guaranteed</span></span>
-        <span><i class="fa fa-location-dot" aria-hidden="true"></i> <span data-i18n="svc_t4">Shuwaikh Industrial Area</span></span>
+        <span><i class="fa fa-user-gear" aria-hidden="true"></i> German-car specialist mechanics</span>
+        <span><i class="fa fa-certificate" aria-hidden="true"></i> Genuine &amp; OEM parts fitted</span>
+        <span><i class="fa fa-shield-halved" aria-hidden="true"></i> Workmanship guaranteed</span>
       </div>
     </div>
-
-    <!-- The workshop photo collage is NOT here: it sits directly under the hero
-         (#workshopBand). Only the heading + job cards moved to the end. -->
     <div class="container">
       <div class="svc-list-head">
-        <h3 data-i18n="svc_list_h">Every job we take on</h3>
-        <p data-i18n="svc_list_p">Tap any job to book it on WhatsApp — we'll confirm the price and a time.</p>
+        <h3>Every job we take on</h3>
+        <p>Tap any job to book it on WhatsApp. We'll confirm the price and a time.</p>
       </div>
       <div class="services-grid" id="servicesGrid"></div>
       <div class="svc-cta">
         <div class="svc-cta-txt">
-          <h3 data-i18n="svc_cta_h">Not sure what your car needs?</h3>
-          <p data-i18n="svc_cta_p">Send us the make, model and what it's doing — a warning light, a noise, a leak — and our mechanics will tell you what it takes.</p>
+          <h3>Not sure what your car needs?</h3>
+          <p>Send us the make, model and what it's doing (a warning light, a noise, a leak) and our mechanics will tell you what it takes.</p>
         </div>
         <div class="svc-cta-btns">
-          <button type="button" class="svc-book" onclick="askServiceAdvice()"><i class="fab fa-whatsapp" aria-hidden="true"></i> <span data-i18n="svc_cta_wa">Ask a mechanic</span></button>
-          <a class="svc-cta-call" href="tel:+96599115215"><i class="fa fa-phone" aria-hidden="true"></i> <span data-i18n="svc_cta_call">+965 9911 5215</span></a>
+          <button type="button" class="svc-book" onclick="askServiceAdvice()"><i class="fab fa-whatsapp" aria-hidden="true"></i> Ask a mechanic</button>
+          <a class="svc-cta-call" href="tel:+96599115215"><i class="fa fa-phone" aria-hidden="true"></i> +965 9911 5215</a>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- 8. VISIT US — about + contact + FAQ in one section. -->
+  <section id="contact" class="rd-visit rd-on-dark" aria-labelledby="visitTitle">
+    <div class="container rd-visit-grid">
+      <div id="about">
+        <div class="rd-sec-head-main"><span class="rd-idx">05</span><div><span class="rd-eyebrow">Visit the shop</span><h2 class="rd-h2" id="visitTitle">Alamdar Auto, <em>Shuwaikh</em></h2></div></div>
+        <p class="rd-visit-lead">Alamdar Auto Spare Parts Co. is an authorized distributor of auto spare parts in Kuwait. We specialise in German and European cars, from filters and brake pads to engine, suspension and electrical parts, plus Mercedes truck and Toyota parts, with real fitment advice in Arabic and English.</p>
+        <dl class="rd-facts">
+          <div class="rd-fact"><dt>Address</dt><dd>Shuwaikh Industrial Area<small>Kuwait</small></dd></div>
+          <div class="rd-fact"><dt>Opening hours</dt><dd>Sat – Thu<small>8 AM – 9 PM</small></dd></div>
+          <div class="rd-fact"><dt>Phone / WhatsApp</dt><dd><a href="tel:+96599115215">+965 9911 5215</a><small>Tel <a href="tel:+96524827072">+965 2482 7072</a></small></dd></div>
+          <div class="rd-fact"><dt>Email</dt><dd><a href="mailto:info@alamdar-auto.com">info@alamdar-auto.com</a></dd></div>
+        </dl>
+        <div class="rd-visit-btns">
+          <a class="rd-btn rd-btn-red" href="https://wa.me/96599115215" target="_blank" rel="noopener"><i class="fab fa-whatsapp" aria-hidden="true"></i> Message us</a>
+          <a class="rd-btn rd-btn-ghost" href="https://www.google.com/maps/search/?api=1&amp;query=Alamdar+Auto+Spare+Parts+Co+Shuwaikh+Industrial+Area+Kuwait" target="_blank" rel="noopener"><i class="fa fa-location-dot" aria-hidden="true"></i> Directions</a>
+          <a class="rd-btn rd-btn-ghost" href="tel:+96599115215"><i class="fa fa-phone" aria-hidden="true"></i> Call</a>
+        </div>
+      </div>
+      <div class="rd-faq" id="faq">
+        <h3>Questions we get every day</h3>
+        <details>
+          <summary>How do I make sure a part fits my car?</summary>
+          <p>Pick your car in the finder at the top, search by part number, or send us your VIN (chassis number) on WhatsApp. We confirm the exact part before you pay.</p>
+        </details>
+        <details>
+          <summary>How do I order?</summary>
+          <p>Find the part and tap Enquire. WhatsApp opens with the part details ready to send. We confirm availability, price and delivery, and you pay on delivery or by bank transfer.</p>
+        </details>
+        <details>
+          <summary>Where in Kuwait do you deliver?</summary>
+          <p>Across Kuwait. Message us on WhatsApp with your area and we'll confirm timing, or pick up from our shop in Shuwaikh Industrial Area.</p>
+        </details>
+        <details>
+          <summary>What payment methods do you accept?</summary>
+          <p>Cash on delivery, card on delivery and bank transfer. Payment details are confirmed with you directly on WhatsApp.</p>
+        </details>
+        <details>
+          <summary>Can I return or exchange a part?</summary>
+          <p>All returns need prior approval. Contact us by phone or WhatsApp before sending anything back and we'll arrange it with you.</p>
+        </details>
+        <details>
+          <summary>Do you have trade prices for garages?</summary>
+          <p>Yes. Garages, workshops and fleet operators get trade pricing. Message us to set it up.</p>
+        </details>
+      </div>
+    </div>
+    <!-- Stubs: 03-product-cart-checkout.js binds a submit listener to #contactForm
+         unguarded, so it has to exist. Enquiries go through WhatsApp instead. -->
+    <form id="contactForm" hidden></form>
+    <div id="formSuccess" hidden></div>
+  </section>
   </main>
 
   <footer>
-    <div class="container footer-grid">
-      <div class="footer-brand">
-        <div class="footer-brand-wrap">
-          <img src="logo.jpg" width="234" height="234" alt="Alamdar Auto" class="footer-logo" onerror="this.style.display='none'" />
-          <div class="footer-brand-name-text">Alamdar<span>Auto</span></div>
+    <div class="container rd-foot-top">
+      <div>
+        <div class="rd-foot-brand">
+          <img src="logo.jpg" width="234" height="234" alt="" loading="lazy" onerror="this.style.display='none'" />
+          <span class="rd-wordmark"><b>Alamdar</b><small>Auto Spare Parts · Kuwait</small></span>
         </div>
-        <p data-i18n="footer_desc">Authorized distributor of genuine auto spare parts in Kuwait — German and European cars, plus Toyota.</p>
-        <div class="social-links">
-          <a href="https://wa.me/96599115215" target="_blank" aria-label="Chat with us on WhatsApp"><i class="fab fa-whatsapp"></i></a>
-        </div>
+        <p class="rd-foot-about">Authorized distributor of genuine auto spare parts in Kuwait, for German and European cars plus Toyota. Shuwaikh Industrial Area.</p>
       </div>
-      <div class="footer-links">
-        <h3 data-i18n="footer_nav">Navigation</h3>
-        <a href="#about" data-i18n="nav_about">About Us</a>
-        <a href="#products" data-i18n="nav_products">Parts</a>
-        <a href="#services" data-i18n="nav_services">Services</a>
-        <a href="#faq" data-i18n="nav_faq">FAQ</a>
-        <a href="#contact" data-i18n="nav_contact">Contact</a>
+      <div class="rd-foot-col">
+        <h3>Shop</h3>
+        <a href="#products">All parts</a>
+        <a href="#brandBanners">Shop by car</a>
+        <a href="#categories">Shop by part</a>
+        <a href="#services">Car servicing</a>
       </div>
-      <div class="footer-links">
-        <h3 data-i18n="footer_cats">Categories</h3>
-        <a href="#categories" onclick="filterProducts('engine')" data-i18n="cat_engine">Engine Parts</a>
-        <a href="#categories" onclick="filterProducts('brakes')" data-i18n="cat_brakes">Brakes</a>
-        <a href="#categories" onclick="filterProducts('suspension')" data-i18n="cat_suspension">Suspension &amp; Steering</a>
-        <a href="#categories" onclick="filterProducts('filters')" data-i18n="cat_filters">Filters</a>
-        <a href="#categories" onclick="filterProducts('electrical')" data-i18n="cat_electrical">Electrical &amp; Ignition</a>
-        <a href="#categories" onclick="filterProducts('cooling')" data-i18n="cat_cooling">Cooling &amp; A/C</a>
+      <div class="rd-foot-col">
+        <h3>Help</h3>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Fitment help</a>
+        <a href="#contact">Garage accounts</a>
+        <a href="#contact">Delivery &amp; returns</a>
       </div>
-      <div class="footer-links">
-        <h3 data-i18n="footer_support">Support</h3>
-        <a href="#services" data-i18n="footer_servicing">Car Servicing</a>
-        <a href="#contact" data-i18n="footer_trade">Garage Accounts</a>
-        <a href="#contact" data-i18n="footer_bulk">Bulk Orders</a>
-        <a href="#contact" data-i18n="footer_delivery_info">Delivery Info</a>
-        <a href="#contact" data-i18n="footer_returns">Returns Policy</a>
-        <a href="#contact" data-i18n="footer_tech">Fitment Help</a>
-        <a href="accessibility.html" data-i18n="footer_accessibility">Accessibility</a>
-        <a href="terms.html#privacy" data-i18n="footer_privacy">Privacy Policy</a>
+      <div class="rd-foot-col">
+        <h3>Contact</h3>
+        <a href="https://wa.me/96599115215" target="_blank" rel="noopener">WhatsApp +965 9911 5215</a>
+        <a href="tel:+96524827072">Tel +965 2482 7072</a>
+        <a href="mailto:info@alamdar-auto.com">info@alamdar-auto.com</a>
+        <a href="https://www.google.com/maps/search/?api=1&amp;query=Alamdar+Auto+Spare+Parts+Co+Shuwaikh+Industrial+Area+Kuwait" target="_blank" rel="noopener">Find us on Google Maps</a>
       </div>
     </div>
-    <!-- ── SUBSCRIBE TO OFFERS ─────────────────────────────────────────── -->
-    <!-- Crawlable links to the generated make / category landing pages
-         (scripts/landing-pages.js). Plain hrefs on purpose — the rest of the
-         storefront is client-rendered, so without these Google has no path in. -->
+    <!-- Crawlable links to the generated landing pages (scripts/landing-pages.js) — keep. -->
     <nav class="container footer-seo" aria-label="Spare parts by car make and part type">
       <div><h3>Spare parts by car</h3>
         <a href="make/mercedes.html">Mercedes-Benz parts Kuwait</a>
@@ -967,60 +652,18 @@
         <a href="category/accessories.html">Accessories</a>
       </div>
     </nav>
-    <div class="subscribe-band">
-      <div class="container subscribe-inner">
-        <div class="subscribe-copy">
-          <h3><i class="fa fa-envelope-open-text"></i> Subscribe to our offers</h3>
-          <p>Get deals, new arrivals and garage discounts from Alamdar Auto straight to your inbox.</p>
-        </div>
-        <form class="subscribe-form" onsubmit="doSubscribe(event)">
-          <div class="subscribe-row">
-            <input type="email" id="subEmail" placeholder="you@email.com" autocomplete="email" aria-label="Email address" />
-            <button type="submit" id="subBtn"><i class="fa fa-paper-plane"></i> Subscribe</button>
-          </div>
-          <label class="subscribe-consent">
-            <input type="checkbox" id="subConsent" />
-            <span>I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms &amp; Conditions</a> and <a href="terms.html#privacy" target="_blank" rel="noopener">Privacy Policy</a>, and consent to receiving marketing emails. I can unsubscribe anytime.</span>
-          </label>
-          <div class="subscribe-msg" id="subMsg"></div>
-        </form>
-      </div>
-    </div>
-    <div class="footer-location">
-      <a href="https://www.google.com/maps/search/?api=1&amp;query=Alamdar+Auto+Spare+Parts+Co+Shuwaikh+Industrial+Area+Kuwait" target="_blank" class="footer-map-btn">
-        <i class="fa fa-map-marker-alt"></i> Find Us — Alamdar Auto, Shuwaikh Industrial Area on Google Maps
-      </a>
-    </div>
-    <div class="footer-bottom">
-      <span data-i18n="footer_copy">© 2026 Alamdar Auto Spare Parts Co. Kuwait. All rights reserved.</span>
+    <div class="container rd-foot-bottom">
+      <span>© 2026 Alamdar Auto Spare Parts Co. Kuwait. All rights reserved.</span>
+      <span><a href="terms.html">Terms</a> · <a href="terms.html#privacy">Privacy</a> · <a href="accessibility.html">Accessibility</a></span>
     </div>
   </footer>
 
-  <!-- INTRODUCTION -->
-  <section id="intro">
-    <div class="container intro-inner">
-      <div class="intro-logo-row">
-        <img src="logo.jpg" width="234" height="234" alt="Alamdar Auto" class="intro-logo-img" onerror="this.style.display='none'" />
-        <span class="intro-brand-txt" style="font-size:0.85em">ALAMDAR AUTO</span>
-      </div>
-      <span class="section-tag intro-tag" data-i18n="intro_tag">Welcome to Alamdar Auto</span>
-      <h2 class="intro-heading" data-i18n-html="intro_h2">
-        Kuwait's <span class="orange">German Car</span> Parts Specialist
-      </h2>
-      <p class="intro-body" data-i18n="intro_p">
-        Alamdar Auto supplies engine, brake, suspension, filter, electrical and cooling parts for Mercedes-Benz, BMW, Audi, Volkswagen, Porsche, Jaguar and Range Rover to drivers and garages across Kuwait. Tell us your car and we'll find the right part.
-      </p>
-      <div class="intro-checks">
-        <span class="intro-check"><i class="fa fa-check-circle"></i> <span data-i18n="intro_c1">Genuine &amp; OEM Parts</span></span>
-        <span class="intro-check"><i class="fa fa-check-circle"></i> <span data-i18n="intro_c2">Delivery Across Kuwait</span></span>
-        <span class="intro-check"><i class="fa fa-check-circle"></i> <span data-i18n="intro_c3">Garage &amp; Trade Pricing</span></span>
-        <span class="intro-check"><i class="fa fa-check-circle"></i> <span data-i18n="intro_c4">Arabic &amp; English Support</span></span>
-      </div>
-      <a href="tel:+96599115215" class="intro-cta">
-        <i class="fa fa-phone"></i> <span data-i18n="intro_cta_text">Call Us: +965 9911 5215</span>
-      </a>
-    </div>
-  </section>
+  <!-- Mobile action bar (≤768px) — replaces the floating WhatsApp bubble. -->
+  <nav class="rd-actionbar" aria-label="Contact the shop">
+    <a href="tel:+96599115215"><i class="fa fa-phone" aria-hidden="true"></i><span>Call</span></a>
+    <button type="button" onclick="rdFocusSearch()"><i class="fa fa-search" aria-hidden="true"></i><span>Search</span></button>
+    <a class="is-wa" href="https://wa.me/96599115215" target="_blank" rel="noopener"><i class="fab fa-whatsapp" aria-hidden="true"></i><span>WhatsApp</span></a>
+  </nav>
 
   <!-- CHECKOUT MODAL -->
   <div class="checkout-overlay" id="checkoutOverlay">
@@ -1457,9 +1100,9 @@
     var v = '';
     try { v = localStorage.getItem('expert_asset_v') || ''; } catch(e) {}
     v = /^[0-9]+$/.test(v) ? v : '202608170500';
-    ['01-config-data','02-catalog-render','03-product-cart-checkout','04-i18n-order','05-accounts','06-features','07-subscribe','08-hero','09-services'].forEach(function(f) {
+    ['01-config-data','02-catalog-render','03-product-cart-checkout','04-i18n-order','05-accounts','06-features','07-subscribe','09-services','10-redesign','30-v3'].forEach(function(f) {
       var s = document.createElement('script');
-      s.src = 'code/js/' + f + '.js?v=' + v + (f === '08-hero' ? '-float1' : '');
+      s.src = 'code/js/' + f + '.js?v=' + v;
       s.async = false;
       document.body.appendChild(s);
     });

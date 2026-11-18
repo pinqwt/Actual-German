@@ -1,5 +1,7 @@
 # Handoff — German Expert (as of 2026-11-10)
 
+> **2026-11-18 — NEW HOMEPAGE + WORKSHOP LOOK**: the old `index.html` and its car-stage hero (08-hero.js, 10-hero.css, full-size car images, img/hero/src) were deleted at the owner's request, and the redesign (`v2.html`) was renamed to `index.html`. `30-v3.css` was rewritten from the soft "cafe" look to a graphite / red / hazard-stripe parts-counter look. Everything in §4 below about the hero stage, the parts ring and `v2.html` is HISTORY. See CLAUDE.md "Homepage — workshop / parts-counter look".
+
 > **2026-11-15 — SEO landing pages**: 74 make/model + 11 category static pages generated from the old site's vehicle tree, in sitemap, linked from the footer. Product/category photos from the old site are unrecoverable — still need photos from the owner. See CLAUDE.md.
 
 > **2026-11-15 — KUWAIT SWITCH**: same shop as old alamdar-auto.com; site now Kuwait / KD (3 dp) / +965 / old SEO keywords; 25 live products imported without images. See CLAUDE.md.
