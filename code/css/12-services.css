@@ -113,44 +113,49 @@
   /* Scales with the picture: the collage is now as wide as the window, so
      fixed padding left the labels stranded in a corner. */
   padding: clamp(12px, 1.9vw, 38px);
+  padding-bottom: calc(clamp(12px, 1.9vw, 38px) + var(--lift, 0%));
   border: 0;
-  background: transparent;
+  background-color: transparent;
   cursor: pointer;
   font-family: inherit;
   text-align: left;
   color: #fff;
   overflow: hidden;
+  /* No grey flash on phones when tapped. */
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color .22s ease;
 }
-/* Per-quadrant scrim. Without it the caption sits on bare photo, and three of
-   the four quarters have a pale concrete floor exactly there. */
+/* Each button is clipped to the REAL outline of its own photo (clip-path set
+   inline by renderServiceCollage() from the measured polygons in 09-services.js),
+   so everything below — the corner shade, the hover tint and the click area —
+   follows that shape and stops at the seams. */
+
+/* At rest the photo is left natural. The only shading is a small soft pool in
+   the corner behind the caption (anchored where the text sits: --cy is set per
+   photo by the renderer), 0.55 -> 0, so the text stays readable. No band. */
 .svc-quad::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0) 38%, rgba(0,0,0,0.84) 100%);
+  background: radial-gradient(ellipse 72% 58% at 0% var(--cy, 88%), rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.26) 45%, rgba(0,0,0,0) 100%);
   pointer-events: none;
-  transition: background var(--t-base, .25s) var(--ease, ease);
 }
-.svc-quad:hover::before,
-.svc-quad:focus-visible::before {
-  background: linear-gradient(180deg, rgba(193,18,31,0.26) 0%, rgba(0,0,0,0.50) 42%, rgba(0,0,0,0.90) 100%);
+/* HOVER: plain black at 38% over ONLY the hovered photo. The tint is the
+   button's own background, and the button is clipped to its photo, so it takes
+   that exact shape. Mouse only (never sticks on touch) and never a colour. */
+@media (hover: hover) {
+  .svc-quad:hover { background-color: rgba(0,0,0,0.38); }
 }
-/* A box that ends inside its own photo rather than at the foot of the
-   picture: fade the scrim out instead of cutting it off, and sit the text
-   higher so it stays on the dark part. */
-.svc-quad.is-mid { padding-bottom: clamp(22px, 3.4vw, 70px); }
-.svc-quad.is-mid::before {
-  background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.84) 84%, rgba(0,0,0,0.40) 96%, rgba(0,0,0,0) 100%);
-}
-.svc-quad.is-mid:hover::before,
-.svc-quad.is-mid:focus-visible::before {
-  background: linear-gradient(180deg, rgba(193,18,31,0.24) 0%, rgba(0,0,0,0.52) 40%, rgba(0,0,0,0.90) 84%, rgba(0,0,0,0.42) 96%, rgba(0,0,0,0) 100%);
-}
+/* A box that ends inside its own photo rather than at the foot of the picture:
+   sit the text a little higher so it is not on the seam. --lift (set by the
+   renderer, % of picture width) additionally raises a caption whose box has a
+   notch at its bottom-left — the top-right photo's strip — so it rests on the
+   main part of the photo instead of being clipped. */
+.svc-quad.is-mid { padding-bottom: calc(clamp(22px, 3.4vw, 70px) + var(--lift, 0%)); }
 
-.svc-quad:active { transform: scale(.995); }
-/* The scrim is painted in ::before, which would otherwise sit over the shared
-   focus ring from 11-ui-polish.css. */
-.svc-quad:focus-visible { z-index: 2; outline-offset: -4px; }
+/* Keyboard focus: the same black tint plus a white ring (never red). The ring
+   is inset because the clip-path would cut an outside one off. */
+.svc-quad:focus-visible { z-index: 2; background-color: rgba(0,0,0,0.38); outline: 3px solid #fff; outline-offset: -6px; }
 /* The fixed WhatsApp float parks in the bottom-right corner of the viewport,
    which is exactly where the last caption sits once the picture is full-bleed.
    Give that one quadrant room so the two never collide. */
@@ -433,7 +438,9 @@
   .svc-collage-labels > .svc-quad:nth-child(2) { left: 50% !important; top: 0 !important;   width: 50% !important; height: 50% !important; }
   .svc-collage-labels > .svc-quad:nth-child(3) { left: 0 !important;   top: 50% !important; width: 50% !important; height: 50% !important; }
   .svc-collage-labels > .svc-quad:nth-child(4) { left: 50% !important; top: 50% !important; width: 50% !important; height: 50% !important; }
-  .svc-collage-labels > .svc-quad { padding: 8px 10px; }
+  /* The phone picture is an even 2x2 of rectangles: no polygon clip, and the
+     corner shade goes back to the box's bottom-left. */
+  .svc-collage-labels > .svc-quad { padding: 8px 10px; clip-path: none !important; -webkit-clip-path: none !important; --cy: 100% !important; }
   .svc-collage-labels > .svc-quad:last-child { padding-right: 56px; }
   .svc-quad-name { font-size: 12px; }
 }

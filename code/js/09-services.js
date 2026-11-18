@@ -119,6 +119,80 @@ var DEFAULT_BANDS = [
 // picture, but it is the only sane guess for one we have not measured.
 var EVEN_BOXES = [[0, 0, 50, 50], [50, 0, 50, 50], [0, 50, 50, 50], [50, 50, 50, 50]];
 
+// ── THE REAL OUTLINES OF THE FOUR PHOTOS (built-in collage only) ─────────────
+// The photos are not rectangles: one seam is slanted and the top-right photo has
+// a strip running down beside its neighbour, so a rectangle per label spilled
+// onto the next photo. These polygons are in SOURCE PIXELS of
+// img/services/src/collage.png (1920x1080) and were MEASURED, not eyeballed:
+// the 1080p PNG was dumped to grayscale and, for every seam, a straight line was
+// brute-force fitted (every integer offset x every slope step 0.01, scoring the
+// mean luminance jump across the line), then checked on zoomed crops with a
+// coordinate grid. Results:
+//   TL | TR            vertical   x = 847                      (slope 0.00)
+//   TL, TR | BL        horizontal y = 550   (x 0..1169.6)       (slope 0.00)
+//   TR strip | BL, and BR | BL: ONE slanted line
+//                      x = 1168 - 0.26 * (y - 556)  -> (1169.6,550) (1147.2,636) (1031.8,1080)
+//   TR | BR            horizontal y = 636   (x 1147.2..1920)
+// The four polygons tile the picture with no overlap. Each label's <button> is
+// laid on its polygon's bounding box and clipped to the polygon (clip-path also
+// clips hit-testing), so hover and clicks only reach that photo.
+// If the picture is ever replaced: re-measure the seams the same way and edit
+// ONLY this table — boxes, clip-paths and caption lifts are derived from it.
+// Stored per-label boxes are IGNORED for this picture (old rows may still hold
+// the earlier rectangles); they are still used for a custom/remote picture.
+var COLLAGE_W = 1920, COLLAGE_H = 1080;
+var COLLAGE_POLYS = [
+  // 0 top-left: brakes
+  [[0, 0], [847, 0], [847, 550], [0, 550]],
+  // 1 top-right: diagnostics (has the strip down the slanted seam: a notch at its bottom-left)
+  [[847, 0], [1920, 0], [1920, 636], [1147.2, 636], [1169.6, 550], [847, 550]],
+  // 2 bottom-left: oil service
+  [[0, 550], [1169.6, 550], [1031.8, 1080], [0, 1080]],
+  // 3 bottom-right: servicing & repairs
+  [[1147.2, 636], [1920, 636], [1920, 1080], [1031.8, 1080]]
+];
+// Photo for each label, by its stable id (so a hidden label cannot shift the
+// others onto the wrong photo). Unknown ids fall back to reading order.
+var COLLAGE_POLY_BY_ID = { 'q-brakes': 0, 'q-diag': 1, 'q-oil': 2, 'q-repairs': 3 };
+
+// Largest y the polygon reaches on the vertical line x, i.e. where its bottom
+// edge is in that column.
+function _svcPolyBottomAt(poly, x) {
+  var best = -Infinity;
+  for (var i = 0; i < poly.length; i++) {
+    var a = poly[i], b = poly[(i + 1) % poly.length];
+    if ((a[0] <= x && b[0] >= x) || (b[0] <= x && a[0] >= x)) {
+      var y = (a[0] === b[0]) ? Math.max(a[1], b[1]) : a[1] + (b[1] - a[1]) * (x - a[0]) / (b[0] - a[0]);
+      if (y > best) best = y;
+    }
+  }
+  return best;
+}
+
+// Everything a button needs, from one polygon in source pixels.
+function _svcPolyGeom(poly) {
+  var xs = poly.map(function (p) { return p[0]; }), ys = poly.map(function (p) { return p[1]; });
+  var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs);
+  var y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+  var bw = x1 - x0, bh = y1 - y0;
+  var r2 = function (n) { return Math.round(n * 100) / 100; };
+  var clip = 'polygon(' + poly.map(function (p) {
+    return r2((p[0] - x0) / bw * 100) + '% ' + r2((p[1] - y0) / bh * 100) + '%';
+  }).join(',') + ')';
+  // The caption sits bottom-left of the box. If the polygon does not reach the
+  // bottom of its box there (a notch), lift the caption by the missing height so
+  // it rests on the photo instead of being clipped. --lift is in % of the PICTURE
+  // width (padding percentages resolve against the containing block, which is the
+  // full-width labels layer); --cy places the corner shade behind the text.
+  var gap = Math.max(0, y1 - _svcPolyBottomAt(poly, x0 + bw * 0.03));
+  return {
+    box: [r2(x0 / COLLAGE_W * 100), r2(y0 / COLLAGE_H * 100), r2(bw / COLLAGE_W * 100), r2(bh / COLLAGE_H * 100)],
+    clip: clip,
+    lift: r2(gap / COLLAGE_W * 100),
+    cy: r2(Math.max(0, Math.min(100, 100 - (gap + 90) / bh * 100)))
+  };
+}
+
 // A band's img is an extensionless base ('img/services/brakes') so the two
 // widths can be derived from it, which _svcSafeImg would reject for having no
 // extension — so validate the .webp it stands for, and keep the base. A full
@@ -182,13 +256,26 @@ function renderServiceCollage(collage, labels) {
       img + '</picture>';
   }
 
+  var builtIn = !isRemote && collage === DEFAULT_COLLAGE;
   var quads = labels.map(function (b, i) {
-    // Positioned, not gridded — see the box note on DEFAULT_BANDS.
-    var pos = 'left:' + b.box[0] + '%;top:' + b.box[1] + '%;width:' + b.box[2] + '%;height:' + b.box[3] + '%';
+    // Positioned, not gridded — see the box note on DEFAULT_BANDS. For the
+    // built-in picture the box AND the clip-path come from the measured photo
+    // outlines (COLLAGE_POLYS); any stored box is ignored. A custom picture has
+    // no measured outlines, so it keeps its rectangle and no clip.
+    var geom = null;
+    if (builtIn) {
+      var pi = COLLAGE_POLY_BY_ID.hasOwnProperty(b.id) ? COLLAGE_POLY_BY_ID[b.id] : i;
+      if (COLLAGE_POLYS[pi]) geom = _svcPolyGeom(COLLAGE_POLYS[pi]);
+    }
+    var box = geom ? geom.box : b.box;
+    var pos = 'left:' + box[0] + '%;top:' + box[1] + '%;width:' + box[2] + '%;height:' + box[3] + '%';
+    if (geom) {
+      pos += ';clip-path:' + geom.clip + ';-webkit-clip-path:' + geom.clip +
+             ';--lift:' + geom.lift + '%;--cy:' + geom.cy + '%';
+    }
     // A box that stops short of the bottom of the picture ends in the MIDDLE
-    // of its photo, so its scrim has to fade back out or it draws a visible
-    // horizontal step across the shot.
-    var mid = (b.box[1] + b.box[3]) < 99 ? ' is-mid' : '';
+    // of its photo: sit the text a little higher so it is not on the seam.
+    var mid = (box[1] + box[3]) < 99 ? ' is-mid' : '';
     return '<button type="button" class="svc-quad' + mid + '" style="' + pos + '" onclick="bookBand(' + i + ')" ' +
         'aria-label="' + encodeHtmlSvc(BOOK + ' — ' + b.name) + '">' +
         '<span class="svc-quad-name">' + encodeHtmlSvc(b.name) + '</span>' +
