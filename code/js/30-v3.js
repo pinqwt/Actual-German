@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════════════
 // Homepage hero (index.html) — the parts fly onto the board by themselves.
-// On load, --p on #v3Scene runs 0 -> 1 once over ~2.3s; the CSS in 30-v3.css moves each
+// On load, --p on #v3Scene runs 0 -> 1 once over ~1.3s; the CSS in 30-v3.css moves each
 // part from off-screen to its slot as a function of --p (each part has its own start
 // offset, so they arrive one after another). It plays ONCE and stops: no loop, and
 // scrolling does nothing to it — the hero is a normal one-screen section and the page
@@ -13,8 +13,8 @@
   var reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
   if (reduce || !window.requestAnimationFrame) { scene.style.setProperty('--p', '1'); return; }
 
-  var DURATION = 2300;   // ms for the whole arrival, stagger included
-  var DELAY = 350;       // lets the preloader fade first so the visitor sees it start
+  var DURATION = 1300;   // ms for the whole arrival, stagger included
+  var DELAY = 120;       // lets the preloader fade first so the visitor sees it start
   scene.style.setProperty('--p', '0');
   function run() {
     var t0 = null;
