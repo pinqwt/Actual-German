@@ -1,0 +1,439 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   WORKSHOP SERVICES  (#services — markup in index.html, JS in code/js/09-services.js)
+   ───────────────────────────────────────────────────────────────────────────
+   The "our mechanics service your car" band. Dark graphite surface so it reads
+   as a different offer from the white/grey parts catalog above it, with the
+   single red accent (--orange-light is the DARK-surface red; --orange is the
+   light-surface one and would fail contrast here).
+
+   Loaded second-to-last in index.html's loader array — 11-ui-polish.css must
+   stay last, so this file comes before it even though its number is higher.
+   Introduces NO new colour: every value below is an existing token.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+#services {
+  padding: 76px 0 72px;
+  background:
+    radial-gradient(1100px 420px at 50% -10%, rgba(239,59,66,0.13), transparent 70%),
+    linear-gradient(180deg, var(--charcoal) 0%, var(--bar) 100%);
+  border-top: 1px solid rgba(255,255,255,0.07);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  color: #fff;
+}
+
+#services .section-header { margin-bottom: 34px; }
+#services .section-tag {
+  background: rgba(239,59,66,0.16);
+  border-color: rgba(239,59,66,0.38);
+  color: var(--orange-light);
+}
+#services .section-header h2 { color: #fff; }
+#services .section-header h2 .orange { color: var(--orange-light); }
+
+.svc-intro {
+  max-width: 660px;
+  margin: 12px auto 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.74);
+}
+
+/* ── TRUST ROW ─────────────────────────────────────────────────────────── */
+.svc-trust {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 26px;
+  margin: 22px auto 40px;
+}
+.svc-trust span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: rgba(255,255,255,0.78);
+}
+.svc-trust i { color: var(--orange-light); font-size: 13px; }
+
+/* ── THE COLLAGE (one picture, a label written on each quarter) ─────────────
+   The owner composed this 2x2 grid themselves and asked for it whole, so it
+   ships as ONE 16:9 image with a CSS grid of four transparent buttons laid
+   over it. Each button darkens its own quarter from the bottom so the text
+   stays readable over whatever is in the photo. */
+.svc-collage {
+  position: relative;
+  display: block;
+  /* FULL-BLEED. This element lives outside .container in index.html, so it is
+     already the width of the page — no 100vw, which would be half a scrollbar
+     too wide on desktop and shift the centring. Square corners and hairline
+     edges instead of a card, because at this size a rounded box reads as a
+     widget rather than a picture. */
+  width: 100%;
+  margin: clamp(10px, 1.6vw, 26px) 0 clamp(34px, 4vw, 64px);
+  border: 0;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-radius: 0;
+  overflow: hidden;
+  background: var(--charcoal);
+  /* The source is 1920x1080 — matching it keeps the labels on their own
+     quarters at every width and reserves the space before the image lands. */
+  aspect-ratio: 16 / 9;
+}
+/* The collage's own band, directly under the hero (#workshopBand in index.html)
+   rather than inside #services. Dark so the hero's bottom fade runs straight
+   into it; no margins, so the picture meets the hero and the next section edge
+   to edge. Beats the 860px `margin-bottom` below on specificity. */
+.svc-band { background: var(--charcoal); }
+.svc-band .svc-collage { margin: 0; }
+.svc-collage img {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* The labels are POSITIONED, not gridded: the four photos in the collage do
+   not meet in an even cross (see the box note in 09-services.js), so each one
+   gets the rectangle its own photo actually occupies. */
+.svc-collage-labels {
+  position: absolute;
+  inset: 0;
+}
+
+.svc-quad {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 4px;
+  /* Scales with the picture: the collage is now as wide as the window, so
+     fixed padding left the labels stranded in a corner. */
+  padding: clamp(12px, 1.9vw, 38px);
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  color: #fff;
+  overflow: hidden;
+}
+/* Per-quadrant scrim. Without it the caption sits on bare photo, and three of
+   the four quarters have a pale concrete floor exactly there. */
+.svc-quad::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 38%, rgba(0,0,0,0.84) 100%);
+  pointer-events: none;
+  transition: background var(--t-base, .25s) var(--ease, ease);
+}
+.svc-quad:hover::before,
+.svc-quad:focus-visible::before {
+  background: linear-gradient(180deg, rgba(193,18,31,0.26) 0%, rgba(0,0,0,0.50) 42%, rgba(0,0,0,0.90) 100%);
+}
+/* A box that ends inside its own photo rather than at the foot of the
+   picture: fade the scrim out instead of cutting it off, and sit the text
+   higher so it stays on the dark part. */
+.svc-quad.is-mid { padding-bottom: clamp(22px, 3.4vw, 70px); }
+.svc-quad.is-mid::before {
+  background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.84) 84%, rgba(0,0,0,0.40) 96%, rgba(0,0,0,0) 100%);
+}
+.svc-quad.is-mid:hover::before,
+.svc-quad.is-mid:focus-visible::before {
+  background: linear-gradient(180deg, rgba(193,18,31,0.24) 0%, rgba(0,0,0,0.52) 40%, rgba(0,0,0,0.90) 84%, rgba(0,0,0,0.42) 96%, rgba(0,0,0,0) 100%);
+}
+
+.svc-quad:active { transform: scale(.995); }
+/* The scrim is painted in ::before, which would otherwise sit over the shared
+   focus ring from 11-ui-polish.css. */
+.svc-quad:focus-visible { z-index: 2; outline-offset: -4px; }
+/* The fixed WhatsApp float parks in the bottom-right corner of the viewport,
+   which is exactly where the last caption sits once the picture is full-bleed.
+   Give that one quadrant room so the two never collide. */
+.svc-collage-labels > .svc-quad:last-child { padding-right: clamp(12px, 7vw, 132px); }
+
+.svc-quad-name,
+.svc-quad-sub { position: relative; z-index: 1; }
+.svc-quad-name {
+  font-family: var(--font-display);
+  font-size: clamp(13px, 1.95vw, 36px);
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  line-height: 1.12;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.72);
+}
+.svc-quad-sub {
+  font-size: clamp(10px, 0.95vw, 17px);
+  max-width: 46ch;
+  font-weight: 600;
+  line-height: 1.45;
+  color: rgba(255,255,255,0.86);
+  text-shadow: 0 1px 7px rgba(0,0,0,0.82);
+}
+
+/* Heading over the bookable card list, under the collage. */
+.svc-list-head { text-align: center; margin-bottom: 24px; }
+.svc-list-head h3 {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 2.2vw, 23px);
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 6px;
+}
+.svc-list-head p { font-size: 13px; color: rgba(255,255,255,0.62); }
+
+@media (max-width: 860px) {
+  .svc-collage { margin-bottom: 26px; }
+  .svc-quad { padding: 10px 12px; }
+  .svc-quad.is-mid { padding-bottom: 20px; }
+  /* A quarter of a phone-width 16:9 picture is about 190x105 — the name is
+     all that fits, and it is the part that says what we do. */
+  .svc-quad-sub { display: none; }
+  .svc-quad-name { font-size: clamp(11px, 2.7vw, 16px); letter-spacing: .3px; }
+}
+
+/* ── CARD GRID ─────────────────────────────────────────────────────────── */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+  gap: 16px;
+}
+
+.svc-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255,255,255,0.045);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 12px;
+  padding: 22px 20px 20px;
+  position: relative;
+  overflow: hidden;
+}
+/* Red hairline that fills in on hover — the same accent gesture as .cat-card's
+   bottom border, so the two grids feel like one system. */
+.svc-card::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--orange), var(--orange-light));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--t-base, .25s) var(--ease, ease);
+}
+.svc-card:hover::before { transform: scaleX(1); }
+.svc-card:hover {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(239,59,66,0.34);
+}
+
+.svc-icon {
+  width: 46px; height: 46px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(239,59,66,0.14);
+  border: 1px solid rgba(239,59,66,0.26);
+  margin-bottom: 14px;
+}
+.svc-icon i { font-size: 20px; color: var(--orange-light); }
+
+/* Optional photo instead of the icon (admin can paste an image URL). */
+.svc-media {
+  margin: -22px -20px 14px;
+  height: 148px;
+  background: rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+.svc-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Broken/blocked URL — collapse rather than leave a grey slab. */
+.svc-media-failed { display: none; }
+
+.svc-name {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  line-height: 1.25;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.svc-desc {
+  font-size: 13px;
+  line-height: 1.62;
+  color: rgba(255,255,255,0.68);
+  margin-bottom: 14px;
+}
+
+.svc-makes { display: flex; flex-wrap: wrap; gap: 5px; margin: -4px 0 14px; }
+.svc-make {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  padding: 3px 7px;
+  border-radius: 4px;
+  color: rgba(255,255,255,0.72);
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+.svc-meta {
+  margin-top: auto;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(255,255,255,0.14);
+}
+.svc-price {
+  font-size: 18px;
+  font-weight: 900;
+  color: #fff;
+  white-space: nowrap;
+}
+.svc-price em {
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: rgba(255,255,255,0.6);
+}
+/* "Price on request" is a sentence, not a number — don't shout it. */
+.svc-price-poa {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--orange-light);
+  white-space: normal;
+}
+.svc-dur {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.6);
+  white-space: nowrap;
+}
+.svc-dur i { margin-right: 4px; }
+
+/* Stacked, not side by side: at the grid's 268px minimum the two labels fight
+   for width and "Book on WhatsApp" wraps onto two lines, leaving two buttons
+   of different heights. The booking button is the action, so it gets the full
+   width; "Shop the parts" is a quiet text link underneath. */
+.svc-actions { display: flex; flex-direction: column; align-items: stretch; gap: 6px; margin-top: 14px; }
+
+.svc-book {
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 14px;
+  border: none;
+  border-radius: 8px;
+  background: var(--orange);
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+}
+.svc-book:hover { background: var(--orange-dark); }
+.svc-book i { font-size: 15px; }
+
+.svc-parts {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: rgba(255,255,255,0.62);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.svc-parts:hover { color: var(--orange-light); background: rgba(255,255,255,0.05); }
+.svc-parts i { font-size: 10px; transition: transform var(--t-fast, .15s) var(--ease, ease); }
+.svc-parts:hover i { transform: translateX(3px); }
+
+/* ── BOTTOM CTA ────────────────────────────────────────────────────────── */
+.svc-cta {
+  margin-top: 34px;
+  padding: 24px 26px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.045);
+  border: 1px solid rgba(255,255,255,0.10);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.svc-cta-txt h3 {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #fff;
+  margin-bottom: 5px;
+}
+.svc-cta-txt p { font-size: 13px; color: rgba(255,255,255,0.68); line-height: 1.6; }
+.svc-cta-btns { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.svc-cta-call {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 18px;
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 800;
+}
+.svc-cta-call:hover { border-color: var(--orange-light); background: rgba(239,59,66,0.12); }
+
+/* ── RESPONSIVE ────────────────────────────────────────────────────────── */
+@media (max-width: 760px) {
+  #services { padding: 54px 0 50px; }
+  .services-grid { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; }
+  .svc-card { padding: 18px 16px 16px; }
+  .svc-trust { gap: 8px 16px; margin-bottom: 28px; }
+  .svc-cta { flex-direction: column; align-items: stretch; text-align: center; }
+  .svc-cta-btns { justify-content: center; }
+}
+@media (max-width: 420px) {
+  .services-grid { grid-template-columns: 1fr; }
+}
+
+/* ── PHONE COLLAGE (<= 700px) ─────────────────────────────────────────────
+   Phones get the owner's separate portrait collage (1122x1402, an EVEN 2x2
+   grid — unlike the 16:9 pinwheel on larger screens). renderServiceCollage()
+   swaps the picture with <picture><source media="(max-width: 700px)">; this
+   block must use the same 700px. The per-quad boxes are inline styles measured
+   for the pinwheel, so they're overridden here with !important. */
+@media (max-width: 700px) {
+  .svc-collage { aspect-ratio: 1122 / 1402; }
+  .svc-collage-labels > .svc-quad:nth-child(1) { left: 0 !important;   top: 0 !important;   width: 50% !important; height: 50% !important; }
+  .svc-collage-labels > .svc-quad:nth-child(2) { left: 50% !important; top: 0 !important;   width: 50% !important; height: 50% !important; }
+  .svc-collage-labels > .svc-quad:nth-child(3) { left: 0 !important;   top: 50% !important; width: 50% !important; height: 50% !important; }
+  .svc-collage-labels > .svc-quad:nth-child(4) { left: 50% !important; top: 50% !important; width: 50% !important; height: 50% !important; }
+  .svc-collage-labels > .svc-quad { padding: 8px 10px; }
+  .svc-collage-labels > .svc-quad:last-child { padding-right: 56px; }
+  .svc-quad-name { font-size: 12px; }
+}
