@@ -1,31 +1,32 @@
 // ═══════════════════════════════════════════════════════════
-// v3 look (v2.html) — scroll-driven parts board.
-// The hero section is 240vh tall with a sticky 100vh stage inside. This file turns
-// the scroll position through that section into --p (0 to 1) on the section; the
-// CSS in 30-v3.css moves each part from off-screen to its slot as a function of --p.
-// There is NO timer and NO looping animation: scroll down and the parts arrive,
-// scroll up and they leave, stop and everything stops. prefers-reduced-motion
-// gets the finished board with no scroll effect at all.
+// Homepage hero (index.html) — the parts fly onto the board by themselves.
+// On load, --p on #v3Scene runs 0 -> 1 once over ~2.3s; the CSS in 30-v3.css moves each
+// part from off-screen to its slot as a function of --p (each part has its own start
+// offset, so they arrive one after another). It plays ONCE and stops: no loop, and
+// scrolling does nothing to it — the hero is a normal one-screen section and the page
+// continues below it. prefers-reduced-motion gets the finished board with no motion.
 // Every entry point checks for its own element, so on any other page this does nothing.
 // ═══════════════════════════════════════════════════════════
 (function v3Scene() {
   var scene = document.getElementById('v3Scene');
   if (!scene) return;
   var reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
-  if (reduce) { scene.classList.add('v3-static'); scene.style.setProperty('--p', '1'); return; }
+  if (reduce || !window.requestAnimationFrame) { scene.style.setProperty('--p', '1'); return; }
 
-  var queued = false;
-  function update() {
-    queued = false;
-    var r = scene.getBoundingClientRect();
-    var span = r.height - window.innerHeight;
-    var p = span > 0 ? Math.min(1, Math.max(0, -r.top / span)) : 1;
-    scene.style.setProperty('--p', p.toFixed(4));
+  var DURATION = 2300;   // ms for the whole arrival, stagger included
+  var DELAY = 350;       // lets the preloader fade first so the visitor sees it start
+  scene.style.setProperty('--p', '0');
+  function run() {
+    var t0 = null;
+    function frame(now) {
+      if (t0 === null) t0 = now;
+      var p = Math.min(1, (now - t0) / DURATION);
+      scene.style.setProperty('--p', p.toFixed(4));
+      if (p < 1) requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
   }
-  function request() { if (!queued) { queued = true; requestAnimationFrame(update); } }
-  window.addEventListener('scroll', request, { passive: true });
-  window.addEventListener('resize', request);
-  update();
+  setTimeout(run, DELAY);
 })();
 
 // Car cards: slide up once as they scroll into view (no repeat, no loop).

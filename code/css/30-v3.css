@@ -71,11 +71,11 @@ body.v3 {
   .v3 #nav a { font-size: 22px; font-weight: 700; letter-spacing: .1em; }
 }
 
-/* ── HERO: graphite wall, parts fly in as you scroll (never loops) ───── */
-.v3 .v3-scene { --p: 0; position: relative; height: 240vh; background: var(--rd-ink); }
+/* ── HERO: graphite wall, parts fly in on load (plays once) ───── */
+.v3 .v3-scene { --p: 0; position: relative; background: var(--rd-ink); }
 .v3 .v3-scene::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: var(--rd-hazard); z-index: 2; }
 .v3 .v3-stick {
-  position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden;
+  position: relative; min-height: 100vh; min-height: 100svh; overflow: hidden;
   display: flex; flex-direction: column; justify-content: center; gap: clamp(14px, 2.6vh, 30px);
   padding: calc(var(--rd-header-h) + 14px) max(var(--rd-gutter), calc((100% - 1240px) / 2)) 22px;
   background: radial-gradient(70% 55% at 12% 0%, rgba(211, 20, 31, .30), transparent 70%), var(--rd-grid), var(--rd-ink);
@@ -98,7 +98,7 @@ body.v3 {
 .v3 .v3-board { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; width: 100%; max-width: 1240px; margin: 0 auto; counter-reset: slot; }
 @media (min-width: 720px) { .v3 .v3-board { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; } }
 @media (max-width: 719px) { .v3 .v3-slot:nth-child(10) { display: none; } }
-/* One slot = one part. --p (0..1) comes from 30-v3.js; --s is this part's start
+/* One slot = one part. --p (0..1) is animated once on load by 30-v3.js; --s is this part's start
    offset; the part travels from (--sx, --sy) rotated by --sr to its place in the grid. */
 .v3 .v3-slot {
   --t: clamp(0, calc((var(--p) - var(--s)) / .5), 1);
@@ -138,9 +138,7 @@ body.v3 {
   .v3 .v3-part::before { font-size: 9px; top: 5px; left: 6px; }
 }
 @media (max-height: 700px) and (max-width: 719px) { .v3 .v3-sub { display: none; } .v3 .v3-cta { margin-top: 12px; } }
-/* No-motion visitors and no-JS: the finished board, in normal flow. */
-.v3 .v3-scene.v3-static { height: auto; }
-.v3 .v3-scene.v3-static .v3-stick { position: static; height: auto; padding-bottom: 36px; }
+/* No-JS visitors get the finished board from the <noscript> rule in index.html. */
 
 /* ── FINDER band: the parts-counter lookup ───────────────────────────── */
 .v3 .v3-finder-sec { position: relative; background: var(--rd-grid), var(--rd-ink-2); background-size: 48px 48px, 48px 48px, auto; color: #fff; padding: clamp(48px, 6vw, 84px) 0; }
