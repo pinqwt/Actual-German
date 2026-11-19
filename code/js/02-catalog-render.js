@@ -798,7 +798,7 @@ async function deductStock(cartItems) {
 
 // ── SMART SEARCH ─────────────────────────────────────────────────────────────
 // Arabic names per product id so searching in Arabic works. Empty for now —
-// Alamdar Auto's catalog lives entirely in Supabase; add entries (or move
+// German Expert's catalog lives entirely in Supabase; add entries (or move
 // them into expert_settings) if Arabic search is switched on.
 const ARABIC_NAMES = {};
 

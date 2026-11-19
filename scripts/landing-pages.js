@@ -1,5 +1,5 @@
 /*
- * landing-pages.js — static SEO landing pages for Alamdar Auto (Kuwait).
+ * landing-pages.js — static SEO landing pages for German Expert (Kuwait).
  * ---------------------------------------------------------------------------
  * Required by generate-product-pages.js, which passes in the live catalog and
  * writes whatever this returns. Pure functions, no I/O, no dependencies.
@@ -8,7 +8,7 @@
  *   make/<make>-<model>.html    one per model           ("BMW 3 Series spare parts in Kuwait")
  *   category/<slug>.html        one per part category   ("Brake parts in Kuwait")
  *
- * The make -> model -> generation data is the old alamdar-auto.com category
+ * The make -> model -> generation data is the old WordPress site category
  * tree (scripts/data/vehicle-tree.json). The pages carry real, visible copy,
  * a FAQPage + BreadcrumbList + CollectionPage JSON-LD, internal links in every
  * direction and any in-catalog products that fit the make, so they are useful
@@ -77,8 +77,8 @@ module.exports = function buildLandingPages(ctx) {
       mainEntity: o.faq.map((f) => ({ '@type': 'Question', name: f[0], acceptedAnswer: { '@type': 'Answer', text: f[1] } }))
     };
     const coll = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: o.h1, description: o.desc, url: o.url, inLanguage: 'en',
-      isPartOf: { '@type': 'WebSite', name: 'Alamdar Auto Spare Parts Co. Kuwait', url: SITE_BASE },
-      about: { '@type': 'AutoPartsStore', name: 'Alamdar Auto Spare Parts Co. Kuwait', telephone: '+965 9911 5215',
+      isPartOf: { '@type': 'WebSite', name: 'German Expert Auto Spare Parts Co. Kuwait', url: SITE_BASE },
+      about: { '@type': 'AutoPartsStore', name: 'German Expert Auto Spare Parts Co. Kuwait', telephone: '+971 52 536 4791',
         address: { '@type': 'PostalAddress', streetAddress: 'Shuwaikh Industrial Area', addressLocality: 'Kuwait', postalCode: '42415', addressCountry: 'KW' } } };
     const bc = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: crumbs };
     return `<!DOCTYPE html>
@@ -95,7 +95,7 @@ module.exports = function buildLandingPages(ctx) {
   <meta name="geo.region" content="KW" />
   <meta name="geo.placename" content="Shuwaikh Industrial Area, Kuwait" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Alamdar Auto Spare Parts Co. Kuwait" />
+  <meta property="og:site_name" content="German Expert Auto Spare Parts Co. Kuwait" />
   <meta property="og:title" content="${esc(o.title)}" />
   <meta property="og:description" content="${esc(o.desc)}" />
   <meta property="og:url" content="${esc(o.url)}" />
@@ -135,20 +135,20 @@ module.exports = function buildLandingPages(ctx) {
   </style>
 </head>
 <body>
-  <header class="hd"><a href="../"><img src="../logo.jpg" alt="" width="40" height="40" /> ALAMDAR AUTO</a></header>
+  <header class="hd"><a href="../"><img src="../logo.jpg" alt="" width="40" height="40" /> GERMAN EXPERT</a></header>
   <main>
     <nav class="crumb">${o.crumbs.map((c, i) => i === o.crumbs.length - 1 ? esc(c[0]) : `<a href="${esc(c[1])}">${esc(c[0])}</a>`).join(' &rsaquo; ')}</nav>
     <h1>${esc(o.h1)}</h1>
     <p class="ar" lang="ar" dir="rtl">${esc(o.ar)}</p>
     <div class="blk"><p class="lead">${o.lead}</p>
-      <a class="btn" href="${esc(waLink(o.waText))}">Ask on WhatsApp</a><a class="btn alt" href="tel:+${wa}">Call +965 9911 5215</a></div>
+      <a class="btn" href="${esc(waLink(o.waText))}">Ask on WhatsApp</a><a class="btn alt" href="tel:+${wa}">Call +971 52 536 4791</a></div>
 ${o.body}
     <section class="blk"><h2>Common questions</h2>
 ${o.faq.map((f) => `      <details><summary>${esc(f[0])}</summary><p>${esc(f[1])}</p></details>`).join('\n')}
     </section>
   </main>
-  <footer><strong>Alamdar Auto Spare Parts Co. Kuwait</strong> — authorized auto spare parts distributor, Shuwaikh Industrial Area, Kuwait 42415.
-    Tel +965 2482 7072 · WhatsApp +965 9911 5215 · info@alamdar-auto.com</footer>
+  <footer><strong>German Expert Auto Spare Parts Co. Kuwait</strong> — authorized auto spare parts distributor, Shuwaikh Industrial Area, Kuwait 42415.
+    Tel +971 52 538 7296 · WhatsApp +971 52 536 4791</footer>
 </body>
 </html>
 `;
@@ -158,9 +158,9 @@ ${o.faq.map((f) => `      <details><summary>${esc(f[0])}</summary><p>${esc(f[1])
   const catLinks = (rel) => CATEGORIES.map((c) => `<li><a href="${rel}category/${c.slug}.html">${esc(c.label)}</a></li>`).join('');
   const faqCommon = (what) => [
     ['How do I make sure I get the right part for my ' + what + '?',
-      'Send us your chassis (VIN) number or a photo of the old part on WhatsApp at +965 9911 5215 and we will match the exact part number for your ' + what + ' before you buy.'],
+      'Send us your chassis (VIN) number or a photo of the old part on WhatsApp at +971 52 536 4791 and we will match the exact part number for your ' + what + ' before you buy.'],
     ['Where can I buy ' + what + ' spare parts in Kuwait?',
-      'Alamdar Auto Spare Parts Co. is in Shuwaikh Industrial Area, Kuwait. You can visit us, call +965 2482 7072, or message us on WhatsApp.'],
+      'German Expert Auto Spare Parts Co. is in Shuwaikh Industrial Area, Kuwait. You can visit us, call +971 52 538 7296, or message us on WhatsApp.'],
     ['Do you deliver across Kuwait?', 'Yes — message us on WhatsApp with your area and we will confirm the delivery time.'],
     ['Do you sell genuine parts?', 'We are an authorized distributor of auto spare parts in Kuwait, supplying genuine and OEM-quality parts. Tell us which you prefer and we will quote accordingly.']
   ];
@@ -174,17 +174,17 @@ ${o.faq.map((f) => `      <details><summary>${esc(f[0])}</summary><p>${esc(f[1])
       : '';
     const trucks = m.trucks ? ' We also stock Mercedes truck and commercial vehicle parts.' : '';
     const kwEn = [`${m.label} spare parts Kuwait`, `${m.short} auto parts Kuwait`, `${m.label} genuine parts Kuwait`, `${m.short} parts Shuwaikh`,
-      `${m.label} service parts Kuwait`, 'auto spare parts Kuwait', 'Alamdar Auto Spare Parts Kuwait'];
+      `${m.label} service parts Kuwait`, 'auto spare parts Kuwait', 'German Expert Auto Spare Parts Kuwait'];
     pages.push({
       rel: 'make/' + m.slug + '.html', priority: '0.8', changefreq: 'weekly',
       html: shell({
         url: makeUrl(m),
-        title: clip(`${m.label} Spare Parts in Kuwait | Alamdar Auto Shuwaikh`, 65),
-        desc: clip(`Genuine ${m.label} spare parts in Kuwait from Alamdar Auto Spare Parts Co., Shuwaikh Industrial Area — brakes, engine, suspension, cooling, electrical and more.`, 158),
-        keywords: kwEn.concat([`قطع غيار ${m.ar} الكويت`, `${m.ar} قطع غيار السيارات الكويت`, 'علمدار قطع غيار السيارات الكويت']).join(', '),
+        title: clip(`${m.label} Spare Parts in Kuwait | German Expert Shuwaikh`, 65),
+        desc: clip(`Genuine ${m.label} spare parts in Kuwait from German Expert Auto Spare Parts Co., Shuwaikh Industrial Area — brakes, engine, suspension, cooling, electrical and more.`, 158),
+        keywords: kwEn.concat([`قطع غيار ${m.ar} الكويت`, `${m.ar} قطع غيار السيارات الكويت`, 'جيرمان إكسبرت قطع غيار السيارات الكويت']).join(', '),
         h1: `${m.label} Spare Parts in Kuwait`,
-        ar: `قطع غيار ${m.ar} في الكويت — علمدار لقطع غيار السيارات`,
-        lead: `Alamdar Auto Spare Parts Co. supplies ${esc(m.label)} spare parts from Shuwaikh Industrial Area, Kuwait — service items such as filters and brake pads, and engine, suspension, cooling and electrical parts.${esc(trucks)} Tell us your model and chassis number and we will find the right part.`,
+        ar: `قطع غيار ${m.ar} في الكويت — جيرمان إكسبرت لقطع غيار السيارات`,
+        lead: `German Expert Auto Spare Parts Co. supplies ${esc(m.label)} spare parts from Shuwaikh Industrial Area, Kuwait — service items such as filters and brake pads, and engine, suspension, cooling and electrical parts.${esc(trucks)} Tell us your model and chassis number and we will find the right part.`,
         waText: `Hi, I need parts for my ${m.label}`,
         crumbs: [home, [m.label + ' parts', makeUrl(m)]],
         faq: faqCommon(m.label),
@@ -207,13 +207,13 @@ ${o.faq.map((f) => `      <details><summary>${esc(f[0])}</summary><p>${esc(f[1])
         rel: 'make/' + modelSlug(m, md) + '.html', priority: '0.7', changefreq: 'weekly',
         html: shell({
           url: modelUrl(m, md),
-          title: clip(`${full} Spare Parts in Kuwait | Alamdar Auto`, 65),
-          desc: clip(`${full} spare parts in Kuwait${md.gens.length ? ' (' + md.gens.slice(0, 3).join(', ') + (md.gens.length > 3 ? ' and more' : '') + ')' : ''} — Alamdar Auto Spare Parts Co., Shuwaikh Industrial Area.`, 158),
+          title: clip(`${full} Spare Parts in Kuwait | German Expert`, 65),
+          desc: clip(`${full} spare parts in Kuwait${md.gens.length ? ' (' + md.gens.slice(0, 3).join(', ') + (md.gens.length > 3 ? ' and more' : '') + ')' : ''} — German Expert Auto Spare Parts Co., Shuwaikh Industrial Area.`, 158),
           keywords: [`${full} parts Kuwait`, `${full} spare parts Kuwait`, `${m.short} ${md.name} auto parts Kuwait`, `${m.label} parts Shuwaikh`, 'auto spare parts Kuwait']
             .concat(md.gens.slice(0, 4).map((g) => `${full} ${g.replace(/\s*\(.*$/, '')} parts Kuwait`)).concat([`قطع غيار ${m.ar} الكويت`]).join(', '),
           h1: `${full} Spare Parts in Kuwait`,
           ar: `قطع غيار ${m.ar} ${md.name} في الكويت`,
-          lead: `Looking for ${esc(full)} spare parts in Kuwait? Alamdar Auto Spare Parts Co. in Shuwaikh Industrial Area supplies brake, engine, suspension, cooling, electrical and service parts for the ${esc(full)}. Send us your chassis (VIN) number on WhatsApp and we will match the exact part.`,
+          lead: `Looking for ${esc(full)} spare parts in Kuwait? German Expert Auto Spare Parts Co. in Shuwaikh Industrial Area supplies brake, engine, suspension, cooling, electrical and service parts for the ${esc(full)}. Send us your chassis (VIN) number on WhatsApp and we will match the exact part.`,
           waText: `Hi, I need parts for my ${full}`,
           crumbs: [home, [m.label + ' parts', makeUrl(m)], [md.name, modelUrl(m, md)]],
           faq: faqCommon(full),
@@ -232,12 +232,12 @@ ${o.faq.map((f) => `      <details><summary>${esc(f[0])}</summary><p>${esc(f[1])
       rel: 'category/' + c.slug + '.html', priority: '0.7', changefreq: 'weekly',
       html: shell({
         url: catUrl(c),
-        title: clip(`${c.label} in Kuwait | Alamdar Auto Spare Parts`, 65),
+        title: clip(`${c.label} in Kuwait | German Expert Auto Spare Parts`, 65),
         desc: clip(`${c.label} for German and European cars in Kuwait — ${c.blurb}`, 158),
         keywords: [`${c.label} Kuwait`, `${c.label.toLowerCase()} for German cars Kuwait`, 'European auto parts Kuwait', 'auto spare parts Kuwait', 'Shuwaikh industrial area'].concat(items.slice(0, 6).map((i) => `${i} Kuwait`)).concat([`${c.ar} الكويت`]).join(', '),
         h1: `${c.label} in Kuwait`,
-        ar: `${c.ar} في الكويت — علمدار لقطع غيار السيارات`,
-        lead: esc(c.blurb) + ' Available from Alamdar Auto Spare Parts Co., Shuwaikh Industrial Area, Kuwait — send us your car and chassis number and we will find the right part.',
+        ar: `${c.ar} في الكويت — جيرمان إكسبرت لقطع غيار السيارات`,
+        lead: esc(c.blurb) + ' Available from German Expert Auto Spare Parts Co., Shuwaikh Industrial Area, Kuwait — send us your car and chassis number and we will find the right part.',
         waText: `Hi, I need ${c.label.toLowerCase()} for my car`,
         crumbs: [home, [c.label, catUrl(c)]],
         faq: faqCommon('car'),

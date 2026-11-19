@@ -1,4 +1,4 @@
-// ── SUPABASE PROJECT (Alamdar Auto) ──────────────────────────────────────
+// ── SUPABASE PROJECT (German Expert) ──────────────────────────────────────
 // The publishable/anon key is public by design (it can only SELECT, see
 // supabase/schema.sql). Defined once here; the two early IIFEs below and the
 // main SB_URL/SB_KEY reuse it. scripts/generate-product-pages.js parses
@@ -9,7 +9,7 @@ const GE_SB_KEY_B64 = 'c2JfcHVibGlzaGFibGVfV244b1BpZW5TWHlMR0NhR2JZSVk5Z185RWhLd
 const GE_SB_KEY = (function() { try { return atob(GE_SB_KEY_B64); } catch (e) { return ''; } })();
 
 // ── SHOP CONTACT / SITE ──────────────────────────────────────────────────
-const SHOP_WA  = '96599115215';   // international format, digits only, used for wa.me links
+const SHOP_WA  = '971525364791';   // international format, digits only, used for wa.me links
 const SITE_URL = 'https://mukarramkebra.github.io/German-Expert/';
 
 // ── PRICE FORMAT (KD, 3 decimals) ────────────────────────────────────────
@@ -103,7 +103,7 @@ const WISHLIST_ENABLED = false;
           <div style="font-size:15px;color:rgba(255,255,255,0.55);margin-bottom:28px;line-height:1.7">
             We are currently performing maintenance.<br>We'll be back shortly. Thank you for your patience.
           </div>
-          <div style="font-size:15px;font-weight:800;color:#ef3b42;line-height:1.3;letter-spacing:2px">ALAMDAR AUTO</div>
+          <div style="font-size:15px;font-weight:800;color:#ef3b42;line-height:1.3;letter-spacing:2px">GERMAN EXPERT</div>
           <div style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:6px;">Auto Spare Parts — Shuwaikh, Kuwait</div>
         </div>`;
       document.body.appendChild(overlay);
@@ -655,7 +655,7 @@ function checkAssetVersion() {
 function normalizeCategory(raw) {
     const c = (raw || '').toLowerCase().replace(/[\s_]+/g, '-').trim();
     const map = {
-          // common spellings -> Alamdar Auto category slugs
+          // common spellings -> German Expert category slugs
           'engine-parts':        'engine',
           'motor':               'engine',
           'brake':               'brakes',
@@ -699,7 +699,7 @@ let _allProductsCache = null;
 function _invalidateAllProductsCache() { _allProductsCache = null; }
 function getAllProducts() {
     if (_allProductsCache) return _allProductsCache;
-    // Alamdar Auto has no hardcoded base products: every product comes from
+    // German Expert has no hardcoded base products: every product comes from
   // expert_products. (The Kuwait fork dropped ids <= 60 here — removed, it
   // would hide a fresh table's first 60 parts.)
   const extra = _customProds.filter(p => !_hiddenIds.has(p.id) && !_catFullyHiddenSlugs.has(normalizeCategory(p.category))).map(p => ({

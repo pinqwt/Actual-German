@@ -41,6 +41,17 @@ body.v3 {
 /* Section numbers read like a catalogue page ref: a red tab and a mono number. */
 .v3 .rd-idx { font-family: var(--rd-mono); font-weight: 600; font-size: 12px; letter-spacing: .08em; color: #fff; background: var(--rd-red); border: 0; padding: 4px 8px; min-width: 0; margin-top: 4px; border-radius: var(--rd-r-sm); }
 .v3 .rd-on-dark .rd-idx { color: #fff; background: var(--rd-red); border: 0; }
+.v3 .rd-idx { flex: 0 0 auto; white-space: nowrap; }   /* a long heading must not squeeze the "05" onto two lines */
+/* "German Expert" is longer than the old name: keep the wordmark on one line and make room
+   for it on mid-size screens by giving the always-open search box less width. */
+.v3 .rd-wordmark { flex: 0 0 auto; }
+.v3 .rd-wordmark b, .v3 .rd-wordmark small { white-space: nowrap; }
+.v3 .rd-wordmark b { font-size: 24px; letter-spacing: .07em; }
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .v3 .header-search-wrap { width: 190px; }
+  .v3 #nav { gap: 18px; }
+  .v3 .rd-wordmark small { font-size: 8.5px; letter-spacing: .1em; }
+}
 .v3 .rd-eyebrow, .v3 .v3-kicker, .v3 .section-tag { font: 600 12px var(--rd-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--rd-mute); }
 .v3 .v3-kicker { display: block; margin-bottom: 10px; color: var(--rd-red-t); }
 .v3 .rd-on-dark .rd-eyebrow, .v3 #services .section-tag { color: var(--rd-red-2); }
@@ -480,6 +491,10 @@ body.v3 {
   .v3 .v3-cars .v3-car-li { scroll-snap-align: start; }
   .v3 .v3-cars .v3-car-li[data-clone] { display: none; }
 }
+
+/* Contact facts: with no email there are three boxes in a two-column grid, so the last
+   one (phones) spans the full width instead of leaving a hole. */
+.v3 .rd-facts .rd-fact:last-child:nth-child(odd) { grid-column: 1 / -1; }
 
 /* Hover links on the darker header/footer grey: the deeper red keeps 4.5:1+. */
 .v3 #nav a:hover, .v3 .rd-foot-col a:hover, .v3 .footer-seo a:hover { color: var(--rd-red-dk); }

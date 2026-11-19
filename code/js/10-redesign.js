@@ -17,7 +17,7 @@
   var CAR_KEY = 'rd_my_car';
   var tree = null;
 
-  function waNumber() { return (typeof SHOP_WA !== 'undefined' && SHOP_WA) ? SHOP_WA : '96599115215'; }
+  function waNumber() { return (typeof SHOP_WA !== 'undefined' && SHOP_WA) ? SHOP_WA : '971525364791'; }
   function catalogSlug(m) { return m ? (m.fitSlug || m.slug) : ''; }
   function knownMake(slug) {
     return typeof CAR_MAKES !== 'undefined' && Array.isArray(CAR_MAKES) && CAR_MAKES.some(function(x) { return x.slug === slug; });
@@ -90,8 +90,8 @@
     var c = selMake ? chosenCar() : null;
     if (c) remember(c);
     var msg = c
-      ? 'Hello Alamdar Auto, I need a part for my ' + carText(c) + '. Can you help?'
-      : 'Hello Alamdar Auto, I need a part for my car. Can you help?';
+      ? 'Hello German Expert, I need a part for my ' + carText(c) + '. Can you help?'
+      : 'Hello German Expert, I need a part for my car. Can you help?';
     window.open('https://wa.me/' + waNumber() + '?text=' + encodeURIComponent(msg), '_blank', 'noopener');
   };
 

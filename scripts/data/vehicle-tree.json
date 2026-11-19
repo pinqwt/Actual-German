@@ -1,5 +1,5 @@
 {
-  "_note": "Copied 2026-11-15 from the old alamdar-auto.com WooCommerce category tree (Car Brands > make > model > generation). Fixes: the old site filed the Volkswagen models under 'Jaguar' and left 'Volkswagen' and 'Lexus' empty. Mercedes was spelled 'Mecerdes Benz' there. Jaguar and Lexus had no models at all, so Jaguar gets a make page only and Lexus is omitted.",
+  "_note": "Copied 2026-11-15 from the old WordPress site WooCommerce category tree (Car Brands > make > model > generation). Fixes: the old site filed the Volkswagen models under 'Jaguar' and left 'Volkswagen' and 'Lexus' empty. Mercedes was spelled 'Mecerdes Benz' there. Jaguar and Lexus had no models at all, so Jaguar gets a make page only and Lexus is omitted.",
   "makes": [
     {
       "slug": "mercedes", "label": "Mercedes-Benz", "ar": "مرسيدس بنز", "short": "Mercedes", "trucks": true,

@@ -1,5 +1,7 @@
 # Handoff — German Expert (as of 2026-11-10)
 
+> **2026-11-19 — RENAMED BACK TO GERMAN EXPERT, NEW GX LOGO, NEW PHONE NUMBERS** (+971 52 536 4791 / +971 52 538 7296; Alamdar name and old +965 numbers removed everywhere in the repo; visible email removed). See the top of CLAUDE.md for what was deliberately left (Kuwait address, alamdarauto.com photo host, collage sign) and the two things only the owner side can do (update the live seo_settings row, redeploy the edge functions).
+
 > **2026-11-18 — NEW HOMEPAGE + WORKSHOP LOOK**: the old `index.html` and its car-stage hero (08-hero.js, 10-hero.css, full-size car images, img/hero/src) were deleted at the owner's request, and the redesign (`v2.html`) was renamed to `index.html`. `30-v3.css` was rewritten from the soft "cafe" look to a graphite / red / hazard-stripe parts-counter look. The hero parts now fly in AUTOMATICALLY on load (one screen tall, plays once; no scroll-driven section). Everything in §4 below about the hero stage, the parts ring and `v2.html` is HISTORY. See CLAUDE.md "Homepage — workshop / parts-counter look".
 
 > **2026-11-15 — SEO landing pages**: 74 make/model + 11 category static pages generated from the old site's vehicle tree, in sitemap, linked from the footer. Product/category photos from the old site are unrecoverable — still need photos from the owner. See CLAUDE.md.

@@ -1,7 +1,7 @@
 // ══════════════════════════════════════════════════════════════════════════════
 //  WORKSHOP SERVICES  (#services section, code/css/12-services.css)
 // ══════════════════════════════════════════════════════════════════════════════
-//  Alamdar Auto doesn't only sell the part — its mechanics fit it. This renders
+//  German Expert doesn't only sell the part — its mechanics fit it. This renders
 //  the "our mechanics service your car" section: a grid of service cards, each
 //  with an icon (or photo), a price, a rough duration and a WhatsApp booking
 //  button. Every card is a wa.me link, exactly like the parts catalog's Enquire
@@ -291,7 +291,7 @@ function renderServiceCollage(collage, labels) {
 function bookBand(idx) {
   var b = _servicesConfig().bands[idx];
   if (!b) return;
-  var msg = 'Hi Alamdar Auto, I would like to book:\n\n🔧 *' + b.name + '*\n\n' +
+  var msg = 'Hi German Expert, I would like to book:\n\n🔧 *' + b.name + '*\n\n' +
             'My car: (make / model / year)\nPreferred day & time:';
   window.open('https://wa.me/' + SHOP_WA + '?text=' + encodeURIComponent(msg), '_blank');
 }
@@ -428,7 +428,7 @@ function bookService(idx) {
   var s = cfg.items[idx];
   if (!s) return;
   var lines = [
-    'Hi Alamdar Auto, I would like to book a service:',
+    'Hi German Expert, I would like to book a service:',
     '',
     '🔧 *' + s.name + '*'
   ];
@@ -440,7 +440,7 @@ function bookService(idx) {
 
 // "Not sure what it needs?" footer CTA of the section.
 function askServiceAdvice() {
-  var msg = 'Hi Alamdar Auto, my car needs checking.\n\nCar: (make / model / year)\nProblem / symptoms:';
+  var msg = 'Hi German Expert, my car needs checking.\n\nCar: (make / model / year)\nProblem / symptoms:';
   window.open('https://wa.me/' + SHOP_WA + '?text=' + encodeURIComponent(msg), '_blank');
 }
 

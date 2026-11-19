@@ -1,5 +1,5 @@
 /* ════════════════════════════════════════════════════════════════════════
-   ALAMDAR AUTO — REDESIGN LAYER ("workshop editorial"), 2026-11-17
+   GERMAN EXPERT — REDESIGN LAYER ("workshop editorial"), 2026-11-17
    Loaded after the base sheets by index.html (30-v3.css restyles it further).
    Every rule is scoped under body.rd, so this file changes nothing on a page
    whose <body> does not carry that class, even if it gets loaded there.
