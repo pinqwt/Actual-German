@@ -309,8 +309,12 @@ body.v3 {
 .v3 .v3-car:hover { background: #fff; background-image: none; border-color: var(--rd-line); border-left-color: var(--rd-red-dk); box-shadow: 0 22px 34px -24px rgba(20, 23, 26, .55); }
 .v3 .v3-car[aria-pressed="true"] { box-shadow: inset 0 0 0 3px var(--rd-red); }
 .v3 .v3-car::after { color: var(--rd-mute); }
-.v3 .v3-car .v3-car-logo { width: 58px; height: 58px; filter: brightness(0); opacity: 1; top: 14px; }
-.v3 .v3-car-name { margin-top: 72px; color: var(--rd-text); }
+/* The owner's own full-colour logos (img/brands/car-<make>.webp, 2026-11-19). They
+   have different shapes (Audi and Jaguar are wide, Porsche is a tall shield), so each
+   sits in the same 132x64 box with object-fit: contain, left-aligned. No filter:
+   the colours are the point. */
+.v3 .v3-car .v3-car-logo { width: 132px; height: 64px; max-width: none; object-fit: contain; object-position: left center; filter: none; opacity: 1; top: 14px; }
+.v3 .v3-car-name { margin-top: 86px; color: var(--rd-text); }
 .v3 .v3-car-model { color: var(--rd-red-t); }
 .v3 .v3-car .v3-car-img { filter: drop-shadow(0 10px 10px rgba(20, 23, 26, .25)); }
 
