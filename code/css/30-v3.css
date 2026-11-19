@@ -15,13 +15,13 @@
 
 body.v3 {
   --rd-ink: #0f1114; --rd-ink-2: #15181c; --rd-ink-3: #1f2329;
-  --rd-paper: #ffffff; --rd-card: #ffffff; --rd-line: #c5cad0; --rd-line-dk: rgba(255, 255, 255, .13);
+  --rd-paper: #e5e7ea; --rd-card: #f4f5f7; --rd-line: #c5cad0; --rd-line-dk: rgba(255, 255, 255, .13);
   --rd-text: #14171a; --rd-mute: #4f565f; --rd-mute-dk: rgba(255, 255, 255, .74);
   --rd-red: #d3141f; --rd-red-t: #b8101a; --rd-red-dk: #a30e17; --rd-red-2: #ff4650;
   --rd-r: 3px; --rd-r-sm: 2px;
   --rd-display: 'Barlow Condensed', 'Arial Narrow', 'Segoe UI', sans-serif;
   --rd-mono: 'IBM Plex Mono', ui-monospace, Consolas, 'Courier New', monospace;
-  --rd-hazard: repeating-linear-gradient(-45deg, var(--rd-red) 0 12px, #ffffff 12px 24px);
+  --rd-hazard: repeating-linear-gradient(-45deg, var(--rd-red) 0 12px, #c9cdd2 12px 24px);
   --rd-grid: linear-gradient(rgba(255, 255, 255, .045) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .045) 1px, transparent 1px);
   /* the older stylesheets' tokens, so every JS-rendered component follows */
   --orange: #d3141f; --orange-dark: #a30e17; --orange-light: #ff4650; --gold: #ff4650; --flag-red: #d3141f;
@@ -406,3 +406,48 @@ body.v3 {
   .v3 .rd-actionbar > * { color: var(--rd-text); }
   .v3 .rd-actionbar .is-wa { background: var(--rd-red); color: #fff; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   GREY THEME (2026-11-19, owner: "change white to grey"). The all-white block
+   above is kept as the structure; this block, LAST, swaps its whites for greys:
+     page / sections  #e5e7ea     header, footer, bottom bar, menus  #d9dce0
+     cards, plates, inputs  #f4f5f7  (lighter than the page so they still lift)
+   Hazard stripes are red/grey (--rd-hazard). To go back to white, delete this
+   block and restore --rd-paper / --rd-card / --rd-hazard at the top of the file.
+   ═══════════════════════════════════════════════════════════════════════ */
+.v3 { --rd-line: #c1c6cc; --g-chrome: #d9dce0; }
+
+/* Chrome: header, mobile menu, footer, bottom bar, product pop-up bar */
+.v3 #header, .v3 #header.scrolled, .v3 #header:focus-within { background: var(--g-chrome); }
+.v3 footer, .v3 .prod-modal-topbar { background: var(--g-chrome); }
+@media (max-width: 1150px) { .v3 #nav { background: var(--g-chrome); } }
+@media (max-width: 768px) { .v3 .rd-actionbar { background: var(--g-chrome); } }
+
+/* Page surfaces */
+.v3 .v3-scene, .v3 .svc-band, .v3 #services, .v3 #contact.rd-visit, .v3 .rd-brands { background: var(--rd-paper); }
+.v3 .v3-stick {
+  background: radial-gradient(70% 55% at 12% 0%, rgba(211, 20, 31, .08), transparent 70%),
+              linear-gradient(rgba(20, 23, 26, .05) 1px, transparent 1px), linear-gradient(90deg, rgba(20, 23, 26, .05) 1px, transparent 1px), var(--rd-paper);
+  background-size: auto, 48px 48px, 48px 48px, auto;
+}
+.v3 .v3-finder-sec {
+  background: linear-gradient(rgba(20, 23, 26, .045) 1px, transparent 1px), linear-gradient(90deg, rgba(20, 23, 26, .045) 1px, transparent 1px), var(--rd-paper);
+  background-size: 48px 48px, 48px 48px, auto;
+}
+
+/* Cards and plates: lighter grey than the page */
+.v3 .v3-part.t1, .v3 .v3-part.t2, .v3 .v3-part.t3,
+.v3 .v3-car, .v3 .v3-car:hover, .v3 .cat-card, .v3 .svc-card { background-color: var(--rd-card); }
+.v3 .svc-card:hover { background-color: #fafafb; }
+.v3 .svc-cta { background: var(--rd-card); }
+.v3 .btn-add { background: var(--rd-card) !important; }
+.v3 .btn-add:hover { background: var(--rd-red) !important; }
+.v3 .toast-msg { background: var(--rd-card); }
+.v3 .header-search-input, .v3 .header-search-wrap.open .header-search-input { background: var(--rd-card); }
+.v3 .header-search-input:focus { background: #fafafb; }
+.v3 .svc-make { background: #e5e7ea; }
+.v3 .svc-parts:hover { background: #e5e7ea; }
+.v3 .product-img-wrap, .v3 .product-img-fallback, .v3 .svc-media { background: #e9ebee; }
+
+/* Parts-brand logos have white backing: multiply makes it vanish on grey. */
+.v3 .rd-brand-row img { mix-blend-mode: multiply; }
