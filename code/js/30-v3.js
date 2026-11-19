@@ -29,16 +29,24 @@
   setTimeout(run, DELAY);
 })();
 
-// Car cards: slide up once as they scroll into view (no repeat, no loop).
-(function v3CarReveal() {
+// Cars we fit: an endless strip. The seven cards are numbered, then cloned twice so
+// the track is three identical sets; 30-v3.css slides it by exactly one set and
+// repeats, which loops with no jump. Clones are hidden from assistive tech and the
+// tab order (the originals stay reachable). Visitors who prefer reduced motion get
+// the plain swipe row (the CSS hides the clones for them).
+(function v3CarLoop() {
   var row = document.querySelector('.v3-car-row');
-  if (!row || !('IntersectionObserver' in window)) return;
-  var items = row.querySelectorAll('.v3-car-li');
-  items.forEach(function (li, i) { li.style.setProperty('--d', (i * 60) + 'ms'); li.classList.add('v3-pre'); });
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (e.isIntersecting) { e.target.classList.remove('v3-pre'); io.unobserve(e.target); }
+  if (!row) return;
+  var originals = Array.prototype.slice.call(row.querySelectorAll('.v3-car-li'));
+  originals.forEach(function (li, i) { li.style.setProperty('--n', String(i + 1)); });
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  for (var copy = 0; copy < 2; copy++) {
+    originals.forEach(function (li) {
+      var c = li.cloneNode(true);
+      c.setAttribute('aria-hidden', 'true');
+      c.setAttribute('data-clone', '');
+      Array.prototype.forEach.call(c.querySelectorAll('button'), function (b) { b.tabIndex = -1; });
+      row.appendChild(c);
     });
-  }, { rootMargin: '0px 60px 0px 0px', threshold: 0.15 });
-  items.forEach(function (li) { io.observe(li); });
+  }
 })();
