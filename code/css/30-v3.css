@@ -501,3 +501,6 @@ body.v3 {
 
 /* Logos copied from the Magento catalog (Bentley, Rolls-Royce, Skoda, MINI) are PNGs on a white backing: multiply makes the white vanish on the grey card. */
 .v3 .v3-car-logo[src$=".png"] { mix-blend-mode: multiply; }
+
+/* New owner car photos (2026-11-23) are cropped to the car outline, so keep them fully inside the card instead of bleeding off the right edge. */
+.v3 .v3-car .v3-car-img { left: 5%; right: auto; width: 90%; }
