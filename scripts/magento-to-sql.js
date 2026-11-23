@@ -27,7 +27,7 @@ const MAKES = [
 const q = s => s == null ? 'null' : "'" + String(s).replace(/'/g, "''") + "'";
 const jsonLit = o => "'" + JSON.stringify(o).replace(/'/g, "''") + "'";
 
-const products = rows.filter(r => r.name).map((r, i) => {
+const products = rows.filter(r => r.name && r.done).map((r, i) => {
   const id = START_ID + i;
   let cat = CAT[r.cat] || 'accessories';
   if (/\bfilter\b/i.test(r.name)) cat = 'filters';
