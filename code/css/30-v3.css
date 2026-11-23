@@ -480,7 +480,7 @@ body.v3 {
 .v3 .v3-cars { overflow: hidden; }
 .v3 .v3-cars .v3-car-row {
   display: flex; width: max-content; gap: 0; overflow: visible; scroll-snap-type: none;
-  padding: 4px 0 18px; animation: v3CarLoop 48s linear infinite; will-change: transform;
+  padding: 4px 0 18px; animation: v3CarLoop 75s linear infinite; will-change: transform;
 }
 .v3 .v3-cars .v3-car-li { flex: 0 0 clamp(250px, 27vw, 400px); margin-right: 12px; counter-set: car var(--n, 1); }
 .v3 .v3-cars .v3-car-li.v3-pre { opacity: 1; transform: none; }
@@ -498,3 +498,6 @@ body.v3 {
 
 /* Hover links on the darker header/footer grey: the deeper red keeps 4.5:1+. */
 .v3 #nav a:hover, .v3 .rd-foot-col a:hover, .v3 .footer-seo a:hover { color: var(--rd-red-dk); }
+
+/* Logos copied from the Magento catalog (Bentley, Rolls-Royce, Skoda, MINI) are PNGs on a white backing: multiply makes the white vanish on the grey card. */
+.v3 .v3-car-logo[src$=".png"] { mix-blend-mode: multiply; }

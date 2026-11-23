@@ -246,7 +246,7 @@ function renderPage(p) {
     } : undefined,
     offers: priceShown ? {
       '@type': 'Offer',
-      priceCurrency: 'KWD',
+      priceCurrency: 'AED',
       price: p.price,
       priceValidUntil: new Date(Date.now() + 365 * 864e5).toISOString().slice(0, 10),
       itemCondition: 'https://schema.org/NewCondition',
@@ -265,7 +265,7 @@ function renderPage(p) {
   const jsonld = (o) => JSON.stringify(o, (k, v) => v === undefined ? undefined : v);
 
   const priceHtml = priceShown
-    ? `<p class="p-price">${p.price.toFixed(3)} <span>KD</span></p>`
+    ? `<p class="p-price">${p.price.toFixed(2)} <span>AED</span></p>`
     : '';
   const availHtml = priceShown
     ? `<p class="p-avail ${inStock ? 'in' : 'out'}">${inStock ? '✔ In stock' : '✖ Out of stock'}</p>`
@@ -278,7 +278,7 @@ function renderPage(p) {
     ? `<div class="p-variants">
         <p class="p-variants-label">Available options:</p>
         <ul class="p-variants-list">
-          ${p.variants.map((v) => `<li>${esc(v.label)}${(priceShown && v.price > 0 && v.price !== p.price) ? ' — ' + v.price.toFixed(3) + ' KD' : ''}</li>`).join('')}
+          ${p.variants.map((v) => `<li>${esc(v.label)}${(priceShown && v.price > 0 && v.price !== p.price) ? ' — ' + v.price.toFixed(2) + ' AED' : ''}</li>`).join('')}
         </ul>
       </div>`
     : '';
@@ -300,7 +300,7 @@ function renderPage(p) {
   <meta property="og:url" content="${esc(url)}" />
   <meta property="og:image" content="${esc(ogImage)}" />
   ${priceShown ? `<meta property="product:price:amount" content="${p.price}" />
-  <meta property="product:price:currency" content="KWD" />` : ''}
+  <meta property="product:price:currency" content="AED" />` : ''}
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="${esc(titleName)}" />
   <meta name="twitter:description" content="${esc(metaDesc)}" />

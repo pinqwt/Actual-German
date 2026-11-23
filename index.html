@@ -67,8 +67,8 @@
     "image": "https://mukarramkebra.github.io/German-Expert/og-image.jpg",
     "url": "https://mukarramkebra.github.io/German-Expert/",
     "telephone": ["+971 52 536 4791", "+971 52 538 7296"],
-    "priceRange": "KWD",
-    "currenciesAccepted": "KWD",
+    "priceRange": "AED",
+    "currenciesAccepted": "AED",
     "areaServed": { "@type": "Country", "name": "Kuwait" },
     "address": {
       "@type": "PostalAddress",
@@ -352,6 +352,11 @@
         <li class="v3-car-li"><button type="button" class="rd-make v3-car" data-make="porsche" aria-pressed="false" onclick="rdPickMake('porsche')"><img class="v3-car-logo" src="img/brands/car-porsche.webp" alt="" width="132" height="64" loading="lazy"><span class="v3-car-name">Porsche</span><span class="v3-car-model">911</span><img class="v3-car-img" src="img/hero/porsche-911-sm.webp" alt="" width="380" height="170" loading="lazy"></button></li>
         <li class="v3-car-li"><button type="button" class="rd-make v3-car" data-make="landrover" aria-pressed="false" onclick="rdPickMake('landrover')"><img class="v3-car-logo" src="img/brands/car-landrover.webp" alt="" width="132" height="64" loading="lazy"><span class="v3-car-name">Range Rover</span><span class="v3-car-model">Sport</span><img class="v3-car-img" src="img/hero/range-rover-sport-sm.webp" alt="" width="380" height="170" loading="lazy"></button></li>
         <li class="v3-car-li"><button type="button" class="rd-make v3-car" data-make="jaguar" aria-pressed="false" onclick="rdPickMake('jaguar')"><img class="v3-car-logo" src="img/brands/car-jaguar.webp" alt="" width="132" height="64" loading="lazy"><span class="v3-car-name">Jaguar</span><span class="v3-car-model">F-Type</span><img class="v3-car-img" src="img/hero/jaguar-f-type-sm.webp" alt="" width="380" height="170" loading="lazy"></button></li>
+        <!-- The four makes below came from the Magento catalog (logos copied from its brand tiles). No car photo yet: add <img class="v3-car-img" ...> + a <span class="v3-car-model"> when the owner sends one. -->
+        <li class="v3-car-li"><button type="button" class="rd-make v3-car" data-make="bentley" aria-pressed="false" onclick="rdPickMake('bentley')"><img class="v3-car-logo" src="img/brands/car-bentley.png" alt="" width="132" height="64" loading="lazy"><span class="v3-car-name">Bentley</span></button></li>
+        <li class="v3-car-li"><button type="button" class="rd-make v3-car" data-make="rollsroyce" aria-pressed="false" onclick="rdPickMake('rollsroyce')"><img class="v3-car-logo" src="img/brands/car-rollsroyce.png" alt="" width="132" height="64" loading="lazy"><span class="v3-car-name">Rolls-Royce</span></button></li>
+        <li class="v3-car-li"><button type="button" class="rd-make v3-car" data-make="skoda" aria-pressed="false" onclick="rdPickMake('skoda')"><img class="v3-car-logo" src="img/brands/car-skoda.png" alt="" width="132" height="64" loading="lazy"><span class="v3-car-name">Škoda</span></button></li>
+        <li class="v3-car-li"><button type="button" class="rd-make v3-car" data-make="mini" aria-pressed="false" onclick="rdPickMake('mini')"><img class="v3-car-logo" src="img/brands/car-mini.png" alt="" width="132" height="64" loading="lazy"><span class="v3-car-name">MINI</span></button></li>
     </ul>
   </section>
 
@@ -475,7 +480,7 @@
         <p class="empty-cart" data-i18n="cart_empty">Your cart is empty.</p>
       </div>
       <div class="modal-footer">
-        <div class="cart-total"><span data-i18n="cart_total_label">Total:</span> <strong id="cartTotal">0.000 KD</strong></div>
+        <div class="cart-total"><span data-i18n="cart_total_label">Total:</span> <strong id="cartTotal">0.00 AED</strong></div>
         <button class="btn btn-primary" id="checkoutBtn" style="width:100%;justify-content:center;margin-top:0">
           <i class="fab fa-whatsapp"></i> <span data-i18n="cart_wa">Request Quote on WhatsApp</span>
         </button>
@@ -724,7 +729,7 @@
           <div class="co-section co-summary-card">
             <div class="co-section-title"><i class="fa fa-shopping-cart"></i> <span data-i18n="co_order_sum">Order Summary</span></div>
             <div class="co-order-items" id="coItems"></div>
-            <div class="co-total"><span data-i18n="co_total_label">Total Amount</span><strong id="coTotal">0.000 KD</strong></div>
+            <div class="co-total"><span data-i18n="co_total_label">Total Amount</span><strong id="coTotal">0.00 AED</strong></div>
             <button class="co-wa-btn" id="coSubmitBtn"><i class="fab fa-whatsapp" style="font-size:20px"></i> <span data-i18n="co_submit">Send Order on WhatsApp</span></button>
           </div>
         </div>

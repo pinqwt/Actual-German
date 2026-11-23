@@ -32,7 +32,7 @@
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
   function money(n) {
-    return (Number(n) || 0).toFixed(3) + ' KD';
+    return (Number(n) || 0).toFixed(2) + ' AED';
   }
 
   var params = new URLSearchParams(window.location.search);

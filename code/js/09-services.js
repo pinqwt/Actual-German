@@ -26,7 +26,7 @@
 //    DEFAULT for every seeded service on purpose: inventing labour rates for a
 //    real workshop is worse than asking the customer to message. The owner sets
 //    the real prices in the admin tab.
-//  • from: true          → renders "From KD 12.500" (a starting price, not a quote).
+//  • from: true          → renders "From AED 12.50" (a starting price, not a quote).
 //  • cat                 → optional parts-category slug; adds a "Shop the parts"
 //    link that reuses the catalog's own filterProducts().
 //  • makes               → optional car-make slugs, shown as small chips.

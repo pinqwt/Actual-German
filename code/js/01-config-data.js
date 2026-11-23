@@ -12,16 +12,16 @@ const GE_SB_KEY = (function() { try { return atob(GE_SB_KEY_B64); } catch (e) { 
 const SHOP_WA  = '971525364791';   // international format, digits only, used for wa.me links
 const SITE_URL = 'https://mukarramkebra.github.io/German-Expert/';
 
-// ── PRICE FORMAT (KD, 3 decimals) ────────────────────────────────────────
+// ── PRICE FORMAT (AED, 2 decimals) ────────────────────────────────────────
 // Every price shown on the storefront goes through this so the currency and
 // precision live in one place.
-const CURRENCY = 'KD';
+const CURRENCY = 'AED';
 function fmtPrice(n) {
   var v = Number(n);
   if (!isFinite(v)) v = 0;
-  return v.toFixed(3) + ' ' + CURRENCY;
+  return v.toFixed(2) + ' ' + CURRENCY;
 }
-function roundMoney(n) { return Math.round((Number(n) || 0) * 1000) / 1000; }
+function roundMoney(n) { return Math.round((Number(n) || 0) * 100) / 100; }
 
 // ── ONLINE ORDERING (DISABLED ON PURPOSE — catalog-only mode) ─────────────
 // The shop isn't taking orders through the website yet, so the whole
@@ -266,7 +266,10 @@ const CAR_MAKES = [
   { slug: 'opel',       label: 'Opel' },
   { slug: 'landrover',  label: 'Range Rover' },
   { slug: 'jaguar',     label: 'Jaguar' },
-  { slug: 'toyota',     label: 'Toyota' }
+  { slug: 'toyota',     label: 'Toyota' },
+  { slug: 'bentley',    label: 'Bentley' },
+  { slug: 'rollsroyce', label: 'Rolls-Royce' },
+  { slug: 'skoda',      label: 'Škoda' }
 ];
 function getProductMakes(id) {
   var v = _sbFitmentMap[String(id)];

@@ -279,11 +279,11 @@ function renderServicesTab() {
       '</div>' +
       '<textarea class="svc-adm-desc" rows="2" placeholder="What the job includes — one or two plain sentences the customer will read." oninput="svcSet(' + i + ',\'desc\',this.value)">' + encodeHtml(s.desc) + '</textarea>' +
       '<div class="svc-adm-grid">' +
-        '<label>Price (KD)' +
+        '<label>Price (AED)' +
           '<input type="number" min="0" step="1" value="' + (s.price > 0 ? s.price : '') + '" placeholder="Blank = price on request" oninput="svcSet(' + i + ',\'price\',this.value)" />' +
         '</label>' +
         '<label>Starting price?' +
-          '<span class="svc-adm-inline"><input type="checkbox"' + (s.from ? ' checked' : '') + ' onchange="svcSet(' + i + ',\'from\',this.checked,true)" /> show as &quot;From KD …&quot;</span>' +
+          '<span class="svc-adm-inline"><input type="checkbox"' + (s.from ? ' checked' : '') + ' onchange="svcSet(' + i + ',\'from\',this.checked,true)" /> show as &quot;From AED …&quot;</span>' +
         '</label>' +
         '<label>How long' +
           '<input type="text" value="' + encodeHtml(s.duration) + '" placeholder="e.g. 1–2 hrs" oninput="svcSet(' + i + ',\'duration\',this.value)" />' +

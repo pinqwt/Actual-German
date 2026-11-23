@@ -18,9 +18,9 @@ function _pmPriceHtml(rawPrice, id) {
   const sale = getFeaturedSale(id);
   if (sale > 0 && rawPrice > 0 && !window._sbPriceHidden[id]) {
     const now = rawPrice * (1 - sale / 100);
-    return '<span class="prod-price-now">' + now.toFixed(3) + '</span> <span class="prod-price-was">' + rawPrice.toFixed(3) + '</span> <small>' + CURRENCY + '</small>';
+    return '<span class="prod-price-now">' + now.toFixed(2) + '</span> <span class="prod-price-was">' + rawPrice.toFixed(2) + '</span> <small>' + CURRENCY + '</small>';
   }
-  return rawPrice.toFixed(3) + ' <small>' + CURRENCY + '</small>';
+  return rawPrice.toFixed(2) + ' <small>' + CURRENCY + '</small>';
 }
 // SKU for a specific option — options without their own SKU sell under the
 // product's own (matches the source catalog, which suffixes the base SKU

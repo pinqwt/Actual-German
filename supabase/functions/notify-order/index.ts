@@ -43,7 +43,7 @@ function esc(s: unknown): string {
 }
 
 function money(n: number): string {
-  return n.toFixed(3) + " KD";
+  return n.toFixed(2) + " AED";
 }
 
 async function db(path: string, init: RequestInit = {}) {
