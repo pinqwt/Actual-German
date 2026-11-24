@@ -504,3 +504,6 @@ body.v3 {
 
 /* New owner car photos (2026-11-23) are cropped to the car outline, so keep them fully inside the card instead of bleeding off the right edge. */
 .v3 .v3-car .v3-car-img { left: 5%; right: auto; width: 90%; }
+
+/* Model label removed (2026-11-24): lift the make name back to where it sat above the label so long names clear the car. */
+.v3 .v3-car .v3-car-name { margin-bottom: 26px; }
